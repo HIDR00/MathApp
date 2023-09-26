@@ -1,8 +1,21 @@
+
 import 'package:flutter/material.dart';
-import 'package:math/HomePage.dart';
+import 'package:math/provider/phepTinh_State.dart';
+import 'package:math/screen/bangtinh.dart';
+import 'package:provider/provider.dart';
+import 'home/homepage.dart';
+import 'home/homepageScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => PhepTinh(),)
+    ],
+    builder: ((context,child){
+     return const MyApp();
+    }),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,7 +25,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      initialRoute: HomePage.id,
+      routes: {
+        HomePage.id : (context) => const HomePage(),
+      },
     );
   }
 }
