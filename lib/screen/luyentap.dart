@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:math/common/flip_widget.dart';
 import 'package:math/common/result_dialog.dart';
+import 'package:math/model/number_model.dart';
 import 'package:math/screen/result.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -19,11 +20,10 @@ class _LuyenTapState extends State<LuyenTap> {
   late int A;
   late int B;
   late int answer;
-  List<int> lAnswer = [];
+  List<NumberModel> lNumber = [];
   bool _checkAnswer = false;
-  List<bool> lCheckAnswer = [];
-  List<bool> isPick = [];
   int questionLength = 0;
+  List<int> lAnswer = [];
   String indexImage = "1";
   int randomInRange(int min, int max) {
     Random random = Random();
@@ -42,40 +42,46 @@ class _LuyenTapState extends State<LuyenTap> {
     }
     return randomNumber;
   }
-  addAsnwer(){
-    lAnswer = [];
-    lCheckAnswer = [];
-    isPick = [];
-    lAnswer.add(answer);
-    lCheckAnswer.add(false);
-    isPick.add(false);
-    while(lAnswer.length < 4){
-      int randomNumber = ranDomAnswer();
-      if(randomNumber > 0 && !lAnswer.contains(randomNumber)){
-        lAnswer.add(randomNumber);
-        lCheckAnswer.add(false);
-        isPick.add(false);
-      }
-    }
-    lAnswer.shuffle();
-  }
+  late NumberModel answerNumber;
   born(){
     A = randomInRange(1, 10);
     B = randomInRange(1, 10);
     indexImage = B.toString();
     answer = A * B;
+    answerNumber = NumberModel(A: A, B: B, Answer: answer, checkAnswer: false,isPick: false);
   }
+  addAsnwer(){
+    NumberModel tmpNumber;
+    lNumber = [];
+    lAnswer = [];
+    lAnswer.add(answer);
+    lNumber.add(answerNumber);
+    while(lNumber.length < 4){
+      int randomNumber = ranDomAnswer();
+      if(randomNumber > 0 && !lAnswer.contains(randomNumber)){
+        lAnswer.add(randomNumber);
+        tmpNumber = NumberModel(A: A, B: B, Answer: randomNumber, checkAnswer: false, isPick: false);
+        lNumber.add(tmpNumber);
+      }
+    }
+    lNumber.shuffle();
+  }
+  
 
   checkAnswer(int index){
-    if(answer == lAnswer[index]){
+    if(_checkAnswer) return;
+    if(answer == lNumber[index].Answer){
+      if(!lNumber[index].isPick){
+      context.read<PhepTinh>().listAnswer.add(lNumber[index]);
+      }
       if(questionLength < 10){
         context.read<PhepTinh>().startAnimation(AnimationStatus.completed);
         questionLength++;
         print("A");
-        isPick[index] = true;
+        lNumber[index].isPick = true;
         setState(() {
           _checkAnswer = true;
-          lCheckAnswer[index] = true;
+          lNumber[index].checkAnswer = true;
         });
         Future.delayed(const Duration(seconds: 1)).then((value) {
           setState(() {
@@ -85,9 +91,9 @@ class _LuyenTapState extends State<LuyenTap> {
           });
         });
       }else{
-        isPick[index] = true;
+        lNumber[index].isPick = true;
         setState(() {
-          lCheckAnswer[index] = true;
+          lNumber[index].checkAnswer = true;
         });
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => Result(),));
         showDialog(
@@ -98,10 +104,14 @@ class _LuyenTapState extends State<LuyenTap> {
       }
     }else{
       print("B");
+      if(!lNumber[index].isPick){
+        context.read<PhepTinh>().listAnswer.add(lNumber[index]);
+      }
       setState(() {
-        isPick[index] = true;
+        lNumber[index].isPick = true;
       });
     }
+    print("list Answer: ${context.read<PhepTinh>().listAnswer.length}");
   }
   @override
   void initState() {
@@ -109,6 +119,7 @@ class _LuyenTapState extends State<LuyenTap> {
     super.initState();
     born();
     addAsnwer();
+    context.read<PhepTinh>().listAnswer = [];
   }
 
   @override
@@ -128,6 +139,7 @@ class _LuyenTapState extends State<LuyenTap> {
           appBar: AppBar(
             title: GestureDetector(
               onTap: () {
+                print("length: ${lNumber.length}");
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => Result(),));
               },
               child: Text("Bài học",
@@ -204,7 +216,7 @@ class _LuyenTapState extends State<LuyenTap> {
                 height: 350,
                 width: 380,
                 child: GridView.builder(
-                  itemCount: lAnswer.length,
+                  itemCount: lNumber.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,mainAxisExtent: 150,mainAxisSpacing: 10,crossAxisSpacing: 20
                     ),
@@ -212,12 +224,12 @@ class _LuyenTapState extends State<LuyenTap> {
                     return GestureDetector(
                       onTap: (){
                         checkAnswer(index);
-                        print("listCheck: ${lCheckAnswer}");
-                        print("isPick: ${isPick}");
+                        print("listCheck: ${lNumber[index].checkAnswer}");
+                        print("isPick: ${lNumber[index].isPick}");
                       },
                       child: Container(
                           decoration: BoxDecoration(
-                            color: !isPick[index] ? Colors.white : lCheckAnswer[index] ? True : Wrong,
+                            color: !lNumber[index].isPick ? Colors.white : lNumber[index].checkAnswer ? True : Wrong,
                             border: Border.all(
                               color: stroke,
                               width: 1,
@@ -225,10 +237,10 @@ class _LuyenTapState extends State<LuyenTap> {
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
                           child: Center(
-                            child: Text("${lAnswer[index]}",
+                            child: Text("${lNumber[index].Answer}",
                                         style: TextStyle(
                                           fontSize: 20,
-                                          color: !isPick[index] ? Colors.black : Colors.white
+                                          color: !lNumber[index].isPick ? Colors.black : Colors.white
                                                 ),
                                         )
                                 ),

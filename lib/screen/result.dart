@@ -1,6 +1,13 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
+import 'package:math/screen/list_question.dart';
+import 'package:math/screen/luyentap.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 import '../configs/style_configs.dart';
+import '../home/homepage.dart';
+import '../provider/phepTinh_State.dart';
 
 class Result extends StatefulWidget {
   const Result({super.key});
@@ -13,7 +20,7 @@ class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     double _width = 350;
-    double _wTienTrinh = (340 / 100) *100;
+    double _wTienTrinh = (340 / 100) * 100;
     return Stack(
       children: [
         Container(
@@ -35,7 +42,7 @@ class _ResultState extends State<Result> {
             shadowColor: Shadow,
             leading: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, HomePage.id);
               },
               child: Container(
                 margin: EdgeInsets.all(10),
@@ -65,45 +72,219 @@ class _ResultState extends State<Result> {
                       textAlign: TextAlign.center,
                     )),
                 Padding(
-                  padding: const EdgeInsets.only(right: 140, top: 30,bottom: 10),
+                  padding:
+                      const EdgeInsets.only(right: 140, top: 30, bottom: 10),
                   child: Container(
                       height: 20,
                       width: 20,
                       child: Image(
                           image: AssetImage("assets/images/Vector 1@2x.png"))),
                 ),
-                Stack(
+                Container(
+                  height: 40,
+                  width: 350,
+                  decoration: BoxDecoration(
+                    color: BGYellow,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xFFE4C36A),
+                      )
+                    ],
+                    border: Border.all(
+                      color: stroke,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: LinearPercentIndicator(
+                      backgroundColor: Colors.transparent,
+                      progressColor: button,
+                      percent: 0.4,
+                      lineHeight: 28,
+                      barRadius: Radius.circular(10)),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      height: 50,
-                      width: _width,
-                      decoration: BoxDecoration(
-                        color: BGYellow,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFFE4C36A),
-                          )
-                        ],
-                        border: Border.all(
-                          color: stroke,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5,top: 10),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DanhSach(),));
+                      },
                       child: Container(
-                          height: 30,
-                          width: _wTienTrinh,
+                          height: 150,
+                          width: 160,
                           decoration: BoxDecoration(
-                            color: button,
-                            borderRadius: BorderRadius.all(Radius.circular(15))
-                          ),
-                        ),
+                              color: True,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text("10",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w500)),
+                              Text("Chính xác",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500))
+                            ],
+                          )),
                     ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DanhSach(),));
+                      },
+                      child: Container(
+                          height: 150,
+                          width: 160,
+                          decoration: BoxDecoration(
+                              color: Wrong,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text("0",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w500)),
+                              Text("Sai",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500))
+                            ],
+                          )),
+                    )
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DanhSach(),));
+                      },
+                  child: Container(
+                    height: 60,
+                    width: 350,
+                    decoration: BoxDecoration(
+                      color: Yellow2,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFFE4C36A),
+                        )
+                      ],
+                      border: Border.all(
+                        color: stroke,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                            image: AssetImage("assets/image/check_list.png"),
+                            height: 20),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Danh sách câu hỏi",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap:(){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LuyenTap(pheptinh: context.read<PhepTinh>().phepTinh)));
+                  },
+                  child: Container(
+                    height: 60,
+                    width: 350,
+                    decoration: BoxDecoration(
+                      color: Yellow2,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFFE4C36A),
+                        )
+                      ],
+                      border: Border.all(
+                        color: stroke,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                            image: AssetImage("assets/image/redo.png"),
+                            height: 20),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Chơi lại",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, HomePage.id);
+                  },
+                  child: Container(
+                    height: 60,
+                    width: 350,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFFE4C36A),
+                        )
+                      ],
+                      border: Border.all(
+                        color: stroke,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                            image: AssetImage("assets/image/arrow_back.png"),
+                            height: 15),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Menu",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

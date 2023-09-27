@@ -46,27 +46,32 @@ class _ResultDialogState extends State<ResultDialog> {
               onTap: () {
                 
               },
-              child: Container(
-                height: 60,
-                width: 280,
-                decoration: BoxDecoration(
-                  color: Yellow2,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xFFE4C36A),
-                    )
-                  ],
-                  border: Border.all(
-                    color: stroke,
-                    width: 1,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  height: 60,
+                  width: 280,
+                  decoration: BoxDecoration(
+                    color: Yellow2,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xFFE4C36A),
+                      )
+                    ],
+                    border: Border.all(
+                      color: stroke,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: Center(
+                      child: Text(
+                    "Tuyệt vời",
+                    style: TextStyle(fontSize: 20),
+                  )),
                 ),
-                child: Center(
-                    child: Text(
-                  "Tuyệt vời",
-                  style: TextStyle(fontSize: 20),
-                )),
               ),
             ),
           ],
