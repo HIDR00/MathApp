@@ -8,3 +8,5 @@ const Color BG = Color(0xFFFEFDF7);
 const Color BGYellow = Color(0xFFFFF2D4);
 const Color True = Color(0xFF73C08F);
 const Color button = Color(0xFFFEB704);
+
+const String boxNumbers = 'boxNumbers';

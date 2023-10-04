@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:math/provider/phepTinh_State.dart';
@@ -66,7 +65,7 @@ class _FlipWidgetState extends State<FlipWidget> with SingleTickerProviderStateM
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("${widget.A} x ${widget.B} = ",style: TextStyle(
+                                  Text("${widget.A} ${context.read<PhepTinh>().phepTinh ? "x" : ":"} ${widget.B} = ",style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600
                                   ),

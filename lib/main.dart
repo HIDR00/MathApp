@@ -1,12 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:math/provider/phepTinh_State.dart';
-import 'package:math/screen/bangtinh.dart';
+import 'package:math/services/setup.dart';
 import 'package:provider/provider.dart';
-import 'home/homepage.dart';
-import 'home/homepageScreen.dart';
+import 'screen/home/homepage.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await setUp();
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => PhepTinh(),)

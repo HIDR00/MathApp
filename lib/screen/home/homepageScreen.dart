@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:math/configs/style_configs.dart';
 import 'package:math/provider/phepTinh_State.dart';
 import 'package:math/screen/bangtinh.dart';
+import 'package:math/screen/howtoplay.dart';
 import 'package:math/screen/luyentap.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,7 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
+  Box boxNumber = Hive.box(boxNumbers);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,10 +67,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: Text("  Bảng tính\ncửu chương",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500
+              child: GestureDetector(
+                onTap: () {
+                  print("length: ${boxNumber.get('data').length}");
+                },
+                child: Text("  Bảng tính\ncửu chương",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500
+                  ),
                 ),
               ),
             ),
@@ -145,7 +153,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               padding: const EdgeInsets.only(top: 30),
               child: GestureDetector(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => LuyenTap(pheptinh: widget.phepTinh,)));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => LuyenTap()));
                 },
                     child: Container(
                             height: 60,
@@ -170,6 +178,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               padding: const EdgeInsets.only(top: 30),
               child: GestureDetector(
                 onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => HowToPlay(pheptinh: widget.phepTinh)));
                 },
                     child: Container(
                             height: 60,

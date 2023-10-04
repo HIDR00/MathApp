@@ -82,7 +82,7 @@ class _DanhSachState extends State<DanhSach> {
                                 child: Icon(Icons.check,color: True,),
                               ),
                               SizedBox(width: 80,),
-                              Text("${context.read<PhepTinh>().listAnswer[index].A} x ${context.read<PhepTinh>().listAnswer[index].B} = ${context.read<PhepTinh>().listAnswer[index].Answer}",
+                              Text("${context.read<PhepTinh>().listAnswer[index].A} ${context.read<PhepTinh>().phepTinh ? "x" : ":"} ${context.read<PhepTinh>().listAnswer[index].B} = ${context.read<PhepTinh>().listAnswer[index].answer}",
                               style: TextStyle(
                                 color: True,
                               ),
@@ -97,7 +97,7 @@ class _DanhSachState extends State<DanhSach> {
                                 child: Icon(Icons.close_outlined,color: Wrong,),
                               ),
                               SizedBox(width: 80,),
-                              Text("${context.read<PhepTinh>().listAnswer[index].A} x ${context.read<PhepTinh>().listAnswer[index].B} = ${context.read<PhepTinh>().listAnswer[index].Answer}",
+                              Text("${context.read<PhepTinh>().listAnswer[index].A} ${context.read<PhepTinh>().phepTinh ? "x" : ":"} ${context.read<PhepTinh>().listAnswer[index].B} = ${context.read<PhepTinh>().listAnswer[index].answer}",
                               style: TextStyle(
                                 color: Wrong,
                               ),

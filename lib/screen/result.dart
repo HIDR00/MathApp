@@ -1,26 +1,56 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:math/screen/kiemtraplay.dart';
 import 'package:math/screen/list_question.dart';
 import 'package:math/screen/luyentap.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../configs/style_configs.dart';
-import '../home/homepage.dart';
+import 'home/homepage.dart';
 import '../provider/phepTinh_State.dart';
 
 class Result extends StatefulWidget {
-  const Result({super.key});
+  const Result({super.key, required this.manchoi});
+  final bool manchoi;
 
   @override
   State<Result> createState() => _ResultState();
 }
 
 class _ResultState extends State<Result> {
+  int dung = 0;
+  int maxDung = 0;
+  result1() {
+    for (int i = 1; i < context.read<PhepTinh>().listAnswer.length; i++) {
+      if (context.read<PhepTinh>().listAnswer[i].checkAnswer) {
+        dung++;
+        if (dung > maxDung) {
+          maxDung = dung;
+        }
+      } else {
+        dung = 0;
+      }
+    }
+  }
+
+  result2() {
+    for (int i = 1; i < context.read<PhepTinh>().listAnswer.length; i++) {
+      if (context.read<PhepTinh>().listAnswer[i].checkAnswer) {
+        dung++;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.manchoi ? result1() : result2();
+    context.read<PhepTinh>().getTienTrinh();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double _width = 350;
-    double _wTienTrinh = (340 / 100) * 100;
     return Stack(
       children: [
         Container(
@@ -33,9 +63,14 @@ class _ResultState extends State<Result> {
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text(
-              "Kết quả",
-              style: TextStyle(color: Colors.black),
+            title: GestureDetector(
+              onTap: () {
+                print("${context.read<PhepTinh>().listAnswer}");
+              },
+              child: Text(
+                "Kết quả",
+                style: TextStyle(color: Colors.black),
+              ),
             ),
             centerTitle: true,
             backgroundColor: BG,
@@ -64,45 +99,100 @@ class _ResultState extends State<Result> {
             width: double.infinity,
             child: Column(
               children: [
-                Transform.rotate(
-                    angle: -0.2,
-                    alignment: AlignmentDirectional(4, 40),
-                    child: Text(
-                      "Tiến trình học \ntập của bạn",
-                      textAlign: TextAlign.center,
-                    )),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(right: 140, top: 30, bottom: 10),
-                  child: Container(
-                      height: 20,
-                      width: 20,
-                      child: Image(
-                          image: AssetImage("assets/images/Vector 1@2x.png"))),
-                ),
+
+                widget.manchoi ?
                 Container(
-                  height: 40,
-                  width: 350,
-                  decoration: BoxDecoration(
-                    color: BGYellow,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFE4C36A),
-                      )
-                    ],
-                    border: Border.all(
-                      color: stroke,
-                      width: 1,
+                    child: Column(
+                  children: [
+                    Transform.rotate(
+                        angle: -0.2,
+                        alignment: AlignmentDirectional(4, 40),
+                        child: Text(
+                          "Tiến trình học \ntập của bạn",
+                          textAlign: TextAlign.center,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 140, top: 30, bottom: 10),
+                      child: Container(
+                          height: 20,
+                          width: 20,
+                          child: Image(
+                              image:
+                                  AssetImage("assets/images/Vector 1@2x.png"))),
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    Container(
+                      height: 40,
+                      width: 350,
+                      decoration: BoxDecoration(
+                        color: BGYellow,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFFE4C36A),
+                          )
+                        ],
+                        border: Border.all(
+                          color: stroke,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: LinearPercentIndicator(
+                        backgroundColor: Colors.transparent,
+                        progressColor: button,
+                        percent: context.read<PhepTinh>().tienTrinh,
+                        lineHeight: 28,
+                        barRadius: Radius.circular(10),
+                        center: Text("${(context.read<PhepTinh>().tienTrinh *100).toInt()}%"),
+                      ),
+                    ),
+                  ],
+                ))
+                : Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Container(
+                    height: 80,
+                    width: 370,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Container(
+                            width: 65,
+                            child: Stack(
+                              children: [
+                                (index*2) + 1 <= dung ?
+                                Container(
+                                  child: Image(image: AssetImage('assets/images/Ellipse 47.png')),
+                                )
+                                : 
+                                Container(
+                                  child: Image(image: AssetImage('assets/images/Ellipse 47.png'),color: Color(0xFFCFCFCF),),
+                                )
+                                ,
+                                Visibility(
+                                  visible: (index*2) + 1 >= dung,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 25),
+                                    child: Container(
+                                      child: Image(image: AssetImage('assets/images/Ellipse 52.png')),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5,left: 7),
+                                  child: Icon(Icons.check,size: 35,color: Colors.white,),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },),
                   ),
-                  child: LinearPercentIndicator(
-                      backgroundColor: Colors.transparent,
-                      progressColor: button,
-                      percent: 0.4,
-                      lineHeight: 28,
-                      barRadius: Radius.circular(10)),
-                ),
+                )
+                ,
                 SizedBox(
                   height: 20,
                 ),
@@ -110,8 +200,10 @@ class _ResultState extends State<Result> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DanhSach(),));
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => DanhSach(),
+                        ));
                       },
                       child: Container(
                           height: 150,
@@ -123,7 +215,7 @@ class _ResultState extends State<Result> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text("10",
+                              Text("${dung}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 30,
@@ -137,8 +229,10 @@ class _ResultState extends State<Result> {
                           )),
                     ),
                     GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DanhSach(),));
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => DanhSach(),
+                        ));
                       },
                       child: Container(
                           height: 150,
@@ -150,7 +244,7 @@ class _ResultState extends State<Result> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text("0",
+                              Text("${10 - dung}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 30,
@@ -169,9 +263,11 @@ class _ResultState extends State<Result> {
                   height: 30,
                 ),
                 GestureDetector(
-                  onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DanhSach(),));
-                      },
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DanhSach(),
+                    ));
+                  },
                   child: Container(
                     height: 60,
                     width: 350,
@@ -209,8 +305,9 @@ class _ResultState extends State<Result> {
                   height: 30,
                 ),
                 GestureDetector(
-                  onTap:(){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LuyenTap(pheptinh: context.read<PhepTinh>().phepTinh)));
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => widget.manchoi ? LuyenTap() : KiemTraPlay()));
                   },
                   child: Container(
                     height: 60,
@@ -249,7 +346,7 @@ class _ResultState extends State<Result> {
                   height: 30,
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pushNamed(context, HomePage.id);
                   },
                   child: Container(

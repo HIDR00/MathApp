@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:math/model/number_model.dart';
+import 'package:math/provider/phepTinh_State.dart';
+import 'package:provider/provider.dart';
 
 import '../configs/style_configs.dart';
 
@@ -12,6 +15,7 @@ class BangTinh extends StatefulWidget {
 
 class _BangTinhState extends State<BangTinh> {
   int A = 0;
+  List<NumberModel> lNumber = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -19,6 +23,7 @@ class _BangTinhState extends State<BangTinh> {
     if(widget.phepTinh == false){
       A = 1;
     }
+    lNumber = context.read<PhepTinh>().lNumber;
   }
   @override
   Widget build(BuildContext context) {
@@ -87,31 +92,35 @@ class _BangTinhState extends State<BangTinh> {
                     crossAxisCount: 6, crossAxisSpacing: 5,mainAxisSpacing: 5,mainAxisExtent: 180
                   ), 
                   itemBuilder: (context,index){
-                    if(widget.phepTinh == false && A == 0){
-                      return Container();
-                    }else{
-                      return Column(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: ListView.builder(
-                            itemCount: 5,
-                            scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.only(left: 30,bottom: 10),                              
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Icon(Icons.star,color: Color(0xFFD9D9D9));
-                            },
-                          ),
+                    
+                      return GestureDetector(
+                        onTap: () {
+                         print("Star: ${context.read<PhepTinh>().phepTinh ? context.read<PhepTinh>().lNumber[24*A+index*2].numberStar : context.read<PhepTinh>().lNumber[24*A+index*2+1].numberStar}");
+                        },
+                        child: Container(
+                          child: Column(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: ListView.builder(
+                                itemCount: 5,
+                                scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.only(left: 30,bottom: 10),                              
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index2) {
+                                  return widget.phepTinh ? context.read<PhepTinh>().lNumber[24*A+index*2].numberStar <= index2 ? Icon(Icons.star,color: Color(0xFFD9D9D9)) : Icon(Icons.star,color: Color(0xFFeeab04)) : context.read<PhepTinh>().lNumber[24*A+index*2+1].numberStar <= index2 ? Icon(Icons.star,color: Color(0xFFD9D9D9)) : Icon(Icons.star,color: Color(0xFFeeab04));
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: widget.phepTinh ? Text("${lNumber[24*A+index*2].A} x ${lNumber[24*A+index*2].B}= ${lNumber[24*A+index*2].answer}",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),) : 
+                              Text("${lNumber[24*A+index*2+1].A} : ${lNumber[24*A+index*2+1].B} = ${lNumber[24*A+index*2+1].answer}",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
+                              ),
+                          ],
+                                            ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: widget.phepTinh ? Text("${A} x ${index}= ${A*index}",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),) : 
-                          Text("${A*index} : ${A} = ${index}",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
-                          ),
-                      ],
-                    );
-                    }
+                      );
                   }
                 ),
               ),
