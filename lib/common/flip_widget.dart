@@ -70,6 +70,7 @@ class _FlipWidgetState extends State<FlipWidget> with SingleTickerProviderStateM
                                     fontWeight: FontWeight.w600
                                   ),
                                   ),
+                                  context.read<PhepTinh>().typeAnswer ?
                                   widget.flip ? Text("${widget.answer}",style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600)) : 
@@ -85,7 +86,25 @@ class _FlipWidgetState extends State<FlipWidget> with SingleTickerProviderStateM
                                       borderRadius: BorderRadius.all(Radius.circular(15)),
                                     ),
                                     child: Center(child: Text("?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700,color: stroke),)),
-                                  ),
+                                  ) : 
+                                  Selector<PhepTinh,String>(
+                                    selector: (ctx, state) => state.answerDisplay,
+                                    builder: (context, value, _) {
+                                      return Container(
+                                      height: 50,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color:  Colors.white,
+                                        border: Border.all(
+                                          color: stroke,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                                      ),
+                                      child: Center(child: Text("${value}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700,color: stroke),)),
+                                    );
+                                    } ,
+                                  )
                                 ],
                               )
                             ),

@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:math/configs/style_configs.dart';
 import 'package:math/provider/phepTinh_State.dart';
 import 'package:math/screen/bangtinh.dart';
+import 'package:math/screen/home/setting.dart';
 import 'package:math/screen/howtoplay.dart';
 import 'package:math/screen/luyentap.dart';
 import 'package:provider/provider.dart';
@@ -33,20 +34,25 @@ class _HomePageScreenState extends State<HomePageScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: stroke
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => Setting()));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: stroke
+                        ),
+                        shape: BoxShape.circle
                       ),
-                      shape: BoxShape.circle
+                      child: Icon(
+                        Icons.settings,
+                        size: 30,
+                        ),
                     ),
-                    child: Icon(
-                      Icons.settings,
-                      size: 30,
-                      ),
                   ),
                   Container(
                     height: 50,

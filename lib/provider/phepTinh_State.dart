@@ -14,12 +14,54 @@ class PhepTinh extends ChangeNotifier{
   late AnimationController _controller;
   Box boxNumber = Hive.box(boxNumbers);
   late double _tienTrinh;
+  bool _typeAnswer = false;
+  String _answerDisplay = '';
+  // setting
+  int _kkq1 = 0;
+  int _kkq2 = 90000;
+  bool _kkq3 = false;
+  int _ks1 = 0;
+  int _ks2 = 90000;
 
 
+  int get kkq1 => _kkq1;
+  int get kkq2 => _kkq2;
+  bool get kkq3 => _kkq3;
+  int get ks1 => _ks1;
+  int get ks2 => _ks2;
+  String get answerDisplay => _answerDisplay;
+
+
+  void updateKkq1(int newValue) {
+    _kkq1 = newValue;
+    notifyListeners(); 
+  }
+  void updateKkq2(int newValue) {
+    _kkq2 = newValue;
+    notifyListeners(); 
+  }
+  void updateKkq3(bool newValue) {
+    _kkq3 = newValue;
+    notifyListeners(); 
+  }
+  void updateKs1(int newValue) {
+    _ks1 = newValue;
+    notifyListeners(); 
+  }
+  void updateKs2(int newValue) {
+    _ks2 = newValue;
+    notifyListeners(); 
+  }
+  void getAnswerDisplay(String value){
+    _answerDisplay = value;
+    notifyListeners();
+  }
+  
   double get tienTrinh => _tienTrinh;
   AnimationController get controller => _controller;
   bool get phepTinh => _pheptinh;
   List<NumberModel> get lNumber => List.from(_lNumber);
+  bool get typeAnswer  => _typeAnswer;
 
   void startAnimation(value){
     if (controller.status == value) {
@@ -35,6 +77,10 @@ class PhepTinh extends ChangeNotifier{
   set phepTinh(bool value){
     _pheptinh =  value;
     print(_pheptinh);
+    notifyListeners();
+  }
+  set typeAnswer(bool value){
+    _typeAnswer =  value;
     notifyListeners();
   }
   getTienTrinh(){
