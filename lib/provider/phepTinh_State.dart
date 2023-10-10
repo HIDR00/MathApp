@@ -13,16 +13,22 @@ class PhepTinh extends ChangeNotifier{
   List<NumberModel> listAnswer = [];
   late AnimationController _controller;
   Box boxNumber = Hive.box(boxNumbers);
-  late double _tienTrinh;
-  bool _typeAnswer = false;
+  late double _tienTrinh1 = 0;
+  late double _tienTrinh2 = 0;
   String _answerDisplay = '';
+  
+
   // setting
   int _kkq1 = 0;
   int _kkq2 = 90000;
   bool _kkq3 = false;
   int _ks1 = 0;
   int _ks2 = 90000;
-
+  bool _typeAnswerKT = true;
+  bool _typeAnswerLT = true;
+  int _ctl2 = 0;
+  bool _htk = false;
+  int _tgtl = 10;
 
   int get kkq1 => _kkq1;
   int get kkq2 => _kkq2;
@@ -30,7 +36,11 @@ class PhepTinh extends ChangeNotifier{
   int get ks1 => _ks1;
   int get ks2 => _ks2;
   String get answerDisplay => _answerDisplay;
-
+  bool get typeAnswerKT  => _typeAnswerKT;
+  bool get typeAnswerLT  => _typeAnswerLT;
+  int get ctl2 => _ctl2;
+  bool get htk => _htk;
+  int get tgtl => _tgtl;
 
   void updateKkq1(int newValue) {
     _kkq1 = newValue;
@@ -56,12 +66,42 @@ class PhepTinh extends ChangeNotifier{
     _answerDisplay = value;
     notifyListeners();
   }
+  void getTypeAnswerKT(bool value){
+    _typeAnswerKT =  value;
+    notifyListeners();
+  }
+  getTypeAnswerLT(){
+    int tientrinh = 0;
+    if(_pheptinh){
+      tientrinh = (_tienTrinh1*100).toInt();
+    }else{
+      tientrinh = (_tienTrinh2*100).toInt();
+    }
+    if(tientrinh > _ctl2){
+      _typeAnswerLT = false;
+    }else{
+       _typeAnswerLT = true;
+    }
+    notifyListeners();
+  }
+  void updateClt2(int newValue) {
+    _ctl2 = newValue;
+    notifyListeners(); 
+  }
+  void updatehtk(bool newValue) {
+    _htk = newValue;
+    notifyListeners(); 
+  }
+  void updateTgtl(int newValue) {
+    _tgtl = newValue;
+    notifyListeners(); 
+  }
   
-  double get tienTrinh => _tienTrinh;
+  double get tienTrinh1 => _tienTrinh1;
+  double get tienTrinh2 => _tienTrinh2;
   AnimationController get controller => _controller;
   bool get phepTinh => _pheptinh;
   List<NumberModel> get lNumber => List.from(_lNumber);
-  bool get typeAnswer  => _typeAnswer;
 
   void startAnimation(value){
     if (controller.status == value) {
@@ -79,21 +119,31 @@ class PhepTinh extends ChangeNotifier{
     print(_pheptinh);
     notifyListeners();
   }
-  set typeAnswer(bool value){
-    _typeAnswer =  value;
+  getTienTrinh(){
+    double sum1 = 0;
+    double sum2 = 0;
+    int dem = 0;
+    print("sum1: ${sum1}");
+    print("lNumber: ${lNumber.length}");
+    for(var i in _lNumber){
+      if(i.numberStar > 5){
+        i.numberStar = 5;
+      }
+      if(i.pheptinh){
+        dem++;
+        sum1 = sum1 + i.numberStar;
+      }else{
+        sum2 = sum2 + i.numberStar;
+      }
+    }
+    _tienTrinh1 = sum1 / (5 * 144);
+    _tienTrinh2 = sum2 / (5 * 144);
+    print("dem: ${dem}");
+    print("Sum: ${sum1}, pheptinh: ${5*288}");
+    print("tientrinh: ${(_tienTrinh1*100).toInt()}");
     notifyListeners();
   }
-  getTienTrinh(){
-    double sum = 0;
-    for(var i in _lNumber){
-      sum = sum + i.numberStar;
-    }
-    _tienTrinh = sum / (5 * 288);
-    print("Sum: ${sum}, pheptinh: ${5*288}");
-    print("tientrinh: ${(_tienTrinh*100).toInt()*100}");
-  }
   fetch(){
-    // boxNumber.clear();
     for(int i = 0;i < 12;i++){
       for(int j = 0;j < 12;j++){
         NumberModel tmpChan = NumberModel(A: i, B: j, answer: i*j, checkAnswer: false, isPick: false,pheptinh: true);
@@ -107,6 +157,7 @@ class PhepTinh extends ChangeNotifier{
     notifyListeners();
   }
   getData(){
+    _lNumber = [];
     print("get datta");
     for(var i in boxNumber.get('data')){
       _lNumber.add(i);
@@ -114,7 +165,20 @@ class PhepTinh extends ChangeNotifier{
     print("lengtNumber: ${_lNumber.length}");
     notifyListeners();
   }
-
+  xoaTIenTrinh(){
+    _lNumber = [];
+    for(int i = 0;i < 12;i++){
+      for(int j = 0;j < 12;j++){
+        NumberModel tmpChan = NumberModel(A: i, B: j, answer: i*j, checkAnswer: false, isPick: false,pheptinh: true);
+        NumberModel tmpLe = NumberModel(A: i*j, B: j, answer: i, checkAnswer: false, isPick: false,pheptinh: false);
+        _lNumber.add(tmpChan);
+        _lNumber.add(tmpLe);
+      }
+    }
+    boxNumber.put("data", _lNumber);
+    getTienTrinh();
+    notifyListeners();
+  }
   void putdata() {
     boxNumber.put('data', lNumber);
     notifyListeners();

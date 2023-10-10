@@ -7,6 +7,10 @@ import 'package:math/screen/home/setting.dart';
 import 'package:math/screen/howtoplay.dart';
 import 'package:math/screen/luyentap.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../policy.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key,required this.phepTinh});
@@ -17,6 +21,12 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<PhepTinh>().getTienTrinh();
+  }
   Box boxNumber = Hive.box(boxNumbers);
   @override
   Widget build(BuildContext context) {
@@ -75,7 +85,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
               padding: const EdgeInsets.only(top: 20),
               child: GestureDetector(
                 onTap: () {
-                  print("length: ${boxNumber.get('data').length}");
+                  print(context.read<PhepTinh>().lNumber.length);
+                  print(boxNumber.get('data').length);
+                  // print("tientrinh1: ${context.read<PhepTinh>().tienTrinh1}");
+                  // print("tientrinh2: ${context.read<PhepTinh>().tienTrinh2}");
                 },
                 child: Text("  Bảng tính\ncửu chương",
                   style: TextStyle(
@@ -104,7 +117,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     ],
                     shape: BoxShape.circle
                   ),
-                  child: Center(child: Text("A x B",style: TextStyle(fontSize: 20),)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("A x B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Color(0xFFFEFDF7) : Colors.black),),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8,top: 8),
+                        child: Text("${(context.read<PhepTinh>().tienTrinh1 *100).toInt()}%",style: TextStyle(fontSize: 18,color: widget.phepTinh ? Color(0xFFFEFDF7) : Colors.black)),
+                      )
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -124,7 +146,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     ],
                     shape: BoxShape.circle
                   ),
-                  child: Center(child: Text("A : B",style: TextStyle(fontSize: 20),)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("A : B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Colors.black : Color(0xFFFEFDF7)),),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8,top: 8),
+                        child: Text("${(context.read<PhepTinh>().tienTrinh2 *100).toInt()}%",style: TextStyle(fontSize: 18,color: widget.phepTinh ? Colors.black : Color(0xFFFEFDF7))),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -272,45 +303,66 @@ class _HomePageScreenState extends State<HomePageScreen> {
                         ),
                         shape: BoxShape.circle
                       ),
-                      child: Center(
-                        child: Text("?",
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF73C08F),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => PrivacyPolicy(name: 'Thông tinh ứng dụng',url: 'https://www.techlead.vn/kid-math-quiz/'),));
+                        },
+                        child: Center(
+                          child: Text("?",
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF73C08F),
+                            ),
                           ),
                         ),
                       ),
                   ),
-                  Container(
-                    height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: stroke
+                  GestureDetector(
+                    onTap: () {
+                        String title = "Learn Math: Times Tables for kids";
+                        String link = "https://www.techlead.vn/";
+                        String chooserTitle = "Learn Math: Times Tables for kids";
+                        Share.share('$title\n$link', subject: chooserTitle);
+                    },
+                    child: Container(
+                      height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: stroke
+                          ),
+                          shape: BoxShape.circle
                         ),
-                        shape: BoxShape.circle
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.share
+                        child: Center(
+                          child: Icon(
+                            Icons.share
+                          ),
                         ),
-                      ),
+                    ),
                   ),
-                  Container(
-                    height: 50,
-                    width: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: stroke
+                  GestureDetector(
+                    onTap: () async {
+                      final likeUrl = Uri.parse('https://play.google.com/store/apps/details?id=vn.techlead.app.mathapp&fbclid=IwAR347_BEXbk0wKlYwx92nBaIg89QcBVFE2fRlISKMc78UP6bBzwgmM8emjc');
+                      if(await canLaunchUrl(likeUrl)){
+                        await launchUrl(likeUrl);
+                      }
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: stroke
+                          ),
+                          shape: BoxShape.circle
                         ),
-                        shape: BoxShape.circle
-                      ),
-                      child: Image(
-                        image: AssetImage('assets/icons/Mask group.png'),
-                      )  
+                        child: Image(
+                          image: AssetImage('assets/icons/Mask group.png'),
+                        )  
+                    ),
                   ),
                 ],
               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:math/common/error_dialog.dart';
+import 'package:math/common/xoaTienTrinh_dialog.dart';
 import 'package:math/provider/phepTinh_State.dart';
+import 'package:math/screen/policy.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -24,6 +26,8 @@ class _SettingState extends State<Setting> {
   FocusNode kkq1FocusNode = FocusNode();
   FocusNode ks1FocusNode = FocusNode();
   FocusNode ks2FocusNode = FocusNode();
+  FocusNode ctl2FocusNode = FocusNode();
+  FocusNode tgtl1FocusNode = FocusNode();
   @override
   check() {
     print("check: ${kkq1.text}");
@@ -89,8 +93,9 @@ class _SettingState extends State<Setting> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  SizedBox(height: 10,),
                   Container(
-                    height: 120,
+                    height: 90,
                     width: 380,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
@@ -155,13 +160,14 @@ class _SettingState extends State<Setting> {
                       },
                     ),
                   ),
+                  SizedBox(height: 10,),
                   Selector<PhepTinh, Tuple2<int, int>>(
                     selector: (ctx, state) => Tuple2(state.kkq1, state.kkq2),
                     builder: (context, value, child) {
                       kkq1.text = value.item1.toString();
                       kkq2.text = value.item2.toString();
                       return Container(
-                        height: 140,
+                        height: 130,
                         width: 380,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -182,19 +188,11 @@ class _SettingState extends State<Setting> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                // Container(
-                                //   height: 30,
-                                //   width: 30,
-                                //   decoration: BoxDecoration(
-                                //       border: Border.all(color: stroke),
-                                //       borderRadius: BorderRadius.circular(10),
-                                //       color: Yellow2),
-                                //   child: Icon(Icons.check),
-                                // ),
                                 Container(
                                   height: 22,
                                   width: 22,
                                   decoration: BoxDecoration(
+                                    color: Colors.white,
                                       border:
                                           Border.all(color: stroke, width: 2),
                                       borderRadius: BorderRadius.circular(7)),
@@ -203,7 +201,7 @@ class _SettingState extends State<Setting> {
                                     checkColor: Colors.black,
                                     shape: BeveledRectangleBorder(
                                         borderRadius: BorderRadius.circular(3)),
-                                    side: BorderSide(color: Colors.transparent),
+                                    side: BorderSide(color: Colors.white),
                                     activeColor: Yellow2,
                                     onChanged: (newValue) {
                                       setState(() {
@@ -231,6 +229,7 @@ class _SettingState extends State<Setting> {
                                   height: 50,
                                   width: 100,
                                   decoration: BoxDecoration(
+                                    color: Colors.white,
                                       border: Border.all(color: stroke),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextField(
@@ -266,6 +265,7 @@ class _SettingState extends State<Setting> {
                                   height: 50,
                                   width: 100,
                                   decoration: BoxDecoration(
+                                    color: Colors.white,
                                       border: Border.all(color: stroke),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextField(
@@ -300,6 +300,7 @@ class _SettingState extends State<Setting> {
                       );
                     },
                   ),
+                  SizedBox(height: 10,),
                   Selector<PhepTinh, Tuple2<int, int>>(
                     selector: (ctx, state) => Tuple2(state.ks1, state.ks2),
                     builder: (ctx, value, _) {
@@ -332,6 +333,7 @@ class _SettingState extends State<Setting> {
                                   height: 50,
                                   width: 100,
                                   decoration: BoxDecoration(
+                                    color: Colors.white,
                                       border: Border.all(color: stroke),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextField(
@@ -363,6 +365,7 @@ class _SettingState extends State<Setting> {
                                   height: 50,
                                   width: 100,
                                   decoration: BoxDecoration(
+                                    color: Colors.white,
                                       border: Border.all(color: stroke),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextField(
@@ -399,6 +402,7 @@ class _SettingState extends State<Setting> {
                       );
                     },
                   ),
+                  SizedBox(height: 10,),
                   Container(
                     height: 140,
                     width: 380,
@@ -420,41 +424,76 @@ class _SettingState extends State<Setting> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: stroke),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Yellow2),
-                              child: Icon(Icons.check),
-                            ),
+                                  height: 22,
+                                  width: 22,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                      border:
+                                          Border.all(color: stroke, width: 2),
+                                      borderRadius: BorderRadius.circular(7)),
+                                  child: Checkbox(
+                                    value: context.read<PhepTinh>().typeAnswerKT,
+                                    checkColor: Colors.black,
+                                    shape: BeveledRectangleBorder(
+                                        borderRadius: BorderRadius.circular(3)),
+                                    side: BorderSide(color: Colors.transparent),
+                                    activeColor: Yellow2,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        context
+                                            .read<PhepTinh>()
+                                            .getTypeAnswerKT(newValue!);
+                                      });
+                                    },
+                                  ),
+                                ),
                             Text("Kiểm tra", style: TextStyle(fontSize: 18)),
                             Text("Luyện tập từ",
                                 style: TextStyle(fontSize: 18)),
-                            Container(
-                              height: 50,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: stroke),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: TextField(
-                                controller: ctl2,
-                                cursorColor: Yellow2,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20),
-                                decoration: InputDecoration(
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                  ),
-                                ),
-                              ),
+
+                            Selector<PhepTinh,int>(
+                              selector: (ctx, state) => state.ctl2,
+                              builder: (ctx, value, _) {
+                                ctl2.text = context.read<PhepTinh>().ctl2.toString();
+                                return Container(
+                                    height: 50,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                        border: Border.all(color: stroke),
+                                        borderRadius: BorderRadius.circular(15)),
+                                    child: TextField(
+                                      controller: ctl2,
+                                      cursorColor: Yellow2,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20),
+                                      decoration: InputDecoration(
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                      focusNode: ctl2FocusNode,
+                                      onEditingComplete: () {
+                                        try {
+                                          context
+                                              .read<PhepTinh>()
+                                              .updateClt2(int.parse(ctl2.text));
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                        ctl2FocusNode.unfocus();
+                                      },
+                                    ),
+                                  );
+                              } 
                             ),
-                          ],
+                          ]
                         ),
                       ],
                     ),
                   ),
+                  SizedBox(height: 10,),
                   Container(
                     height: 140,
                     width: 380,
@@ -462,11 +501,12 @@ class _SettingState extends State<Setting> {
                         borderRadius: BorderRadius.circular(10),
                         color: BGYellow),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10,),
                               child: Text("Hiện khối trong khi học tập:",
                                   style: TextStyle(
                                       fontSize: 18,
@@ -476,14 +516,29 @@ class _SettingState extends State<Setting> {
                               width: 10,
                             ),
                             Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: stroke),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Yellow2),
-                              child: Icon(Icons.check),
-                            ),
+                                  height: 22,
+                                  width: 22,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                      border:
+                                          Border.all(color: stroke, width: 2),
+                                      borderRadius: BorderRadius.circular(7)),
+                                  child: Checkbox(
+                                    value: context.read<PhepTinh>().htk,
+                                    checkColor: Colors.black,
+                                    shape: BeveledRectangleBorder(
+                                        borderRadius: BorderRadius.circular(3)),
+                                    side: BorderSide(color: Colors.white),
+                                    activeColor: Yellow2,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        context
+                                            .read<PhepTinh>()
+                                            .updatehtk(newValue!);
+                                      });
+                                    },
+                                  ),
+                                ),
                           ],
                         ),
                         SizedBox(
@@ -502,24 +557,44 @@ class _SettingState extends State<Setting> {
                             SizedBox(
                               width: 20,
                             ),
-                            Container(
-                              height: 50,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: stroke),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: TextField(
-                                controller: tgtl,
-                                cursorColor: Yellow2,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20),
-                                decoration: InputDecoration(
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                  ),
-                                ),
-                              ),
+                            Selector<PhepTinh,int>(
+                              selector: (ctx, state) => state.tgtl,
+                              builder: (ctx, value, _) {
+                                tgtl.text = context.read<PhepTinh>().tgtl.toString();
+                                return Expanded(
+                                  child: Container(
+                                      height: 50,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                          border: Border.all(color: stroke),
+                                          borderRadius: BorderRadius.circular(15)),
+                                      child: TextField(
+                                        controller: tgtl,
+                                        cursorColor: Yellow2,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 20),
+                                        decoration: InputDecoration(
+                                          focusedBorder: InputBorder.none,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                        focusNode: tgtl1FocusNode,
+                                        onEditingComplete: () {
+                                          try {
+                                            context
+                                                .read<PhepTinh>()
+                                                .updateTgtl(int.parse(tgtl.text));
+                                          } catch (e) {
+                                            print(e);
+                                          }
+                                          tgtl1FocusNode.unfocus();
+                                        },
+                                      ),
+                                    ),
+                                );
+                              } 
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 5),
@@ -533,17 +608,27 @@ class _SettingState extends State<Setting> {
                   ),
                   Row(
                     children: [
-                      Container(
-                        margin: EdgeInsets.all(10),
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: stroke),
-                            color: Yellow2,
-                            shape: BoxShape.circle),
-                        child: Icon(
-                          Icons.delete_forever,
-                          color: Colors.black,
+                      GestureDetector(
+                        onTap: (){
+                          showDialog(
+                          context: context,
+                          builder: (context) {
+                            return XoaTienTrinh();
+                          },
+                        );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 1, color: stroke),
+                              color: Yellow2,
+                              shape: BoxShape.circle),
+                          child: Icon(
+                            Icons.delete_forever,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                       Text(
@@ -553,14 +638,19 @@ class _SettingState extends State<Setting> {
                       SizedBox(
                         width: 85,
                       ),
-                      Text(
-                        "Chính sách bảo mật",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.black,
-                          decorationThickness: 2.0,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => PrivacyPolicy(name: 'Chính sách bảo mật',url: 'https://www.techlead.vn/privacy-policy/'),));
+                        },
+                        child: Text(
+                          "Chính sách bảo mật",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.black,
+                            decorationThickness: 2.0,
+                          ),
                         ),
                       )
                     ],

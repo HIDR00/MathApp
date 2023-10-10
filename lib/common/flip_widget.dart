@@ -70,7 +70,7 @@ class _FlipWidgetState extends State<FlipWidget> with SingleTickerProviderStateM
                                     fontWeight: FontWeight.w600
                                   ),
                                   ),
-                                  context.read<PhepTinh>().typeAnswer ?
+                                  context.read<PhepTinh>().typeAnswerLT ?
                                   widget.flip ? Text("${widget.answer}",style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600)) : 

@@ -21,20 +21,24 @@ class _ResultState extends State<Result> {
   int dung = 0;
   int maxDung = 0;
   result1() {
+    if(context.read<PhepTinh>().listAnswer[0].checkAnswer){
+      dung = 1;
+    }
     for (int i = 1; i < context.read<PhepTinh>().listAnswer.length; i++) {
-      if (context.read<PhepTinh>().listAnswer[i].checkAnswer) {
+      if (context.read<PhepTinh>().listAnswer[i].checkAnswer && context.read<PhepTinh>().listAnswer[i-1].checkAnswer) {
         dung++;
         if (dung > maxDung) {
           maxDung = dung;
         }
-      } else {
-        dung = 0;
-      }
+      } 
+      // else {
+      //   dung = 0;
+      // }
     }
   }
 
   result2() {
-    for (int i = 1; i < context.read<PhepTinh>().listAnswer.length; i++) {
+    for (int i = 0; i < context.read<PhepTinh>().listAnswer.length; i++) {
       if (context.read<PhepTinh>().listAnswer[i].checkAnswer) {
         dung++;
       }
@@ -140,10 +144,10 @@ class _ResultState extends State<Result> {
                       child: LinearPercentIndicator(
                         backgroundColor: Colors.transparent,
                         progressColor: button,
-                        percent: context.read<PhepTinh>().tienTrinh,
+                        percent:  context.read<PhepTinh>().phepTinh ? context.read<PhepTinh>().tienTrinh1 : context.read<PhepTinh>().tienTrinh2,
                         lineHeight: 28,
                         barRadius: Radius.circular(10),
-                        center: Text("${(context.read<PhepTinh>().tienTrinh *100).toInt()}%"),
+                        center: Text("${((context.read<PhepTinh>().phepTinh ? context.read<PhepTinh>().tienTrinh1 : context.read<PhepTinh>().tienTrinh2) *100).toInt()}%"),
                       ),
                     ),
                   ],

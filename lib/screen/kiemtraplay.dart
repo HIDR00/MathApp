@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:math/screen/result.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../common/flip_widget.dart';
@@ -18,7 +20,7 @@ class KiemTraPlay extends StatefulWidget {
   State<KiemTraPlay> createState() => _KiemTraPlayState();
 }
 
-class _KiemTraPlayState extends State<KiemTraPlay> {
+class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin{
   Box boxNumber = Hive.box(boxNumbers);
   late int A;
   late int B;
@@ -26,6 +28,11 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
   List<NumberModel> lNumber = [];
   List<int> lAnswer = [];
   late NumberModel answerNumber;
+  String amount = '';
+   late AnimationController _controller;
+  double percent = 1.0; 
+  int ctl = 1;
+
   int randomInRange(int min, int max) {
     Random random = Random();
     return min + random.nextInt(max - min + 1);
@@ -52,9 +59,19 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
     answer = A * B;
     answerNumber = context.read<PhepTinh>().phepTinh
         ? NumberModel(
-            A: A, B: B, answer: answer, checkAnswer: false, isPick: false,pheptinh: context.read<PhepTinh>().phepTinh)
+            A: A,
+            B: B,
+            answer: answer,
+            checkAnswer: false,
+            isPick: false,
+            pheptinh: context.read<PhepTinh>().phepTinh)
         : NumberModel(
-            A: answer, B: B, answer: A, checkAnswer: false, isPick: false,pheptinh: context.read<PhepTinh>().phepTinh);
+            A: answer,
+            B: B,
+            answer: A,
+            checkAnswer: false,
+            isPick: false,
+            pheptinh: context.read<PhepTinh>().phepTinh);
   }
 
   addAsnwer() {
@@ -73,7 +90,8 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
               B: B,
               answer: randomNumber,
               checkAnswer: false,
-              isPick: false,pheptinh: context.read<PhepTinh>().phepTinh);
+              isPick: false,
+              pheptinh: context.read<PhepTinh>().phepTinh);
           lNumber.add(tmpNumber);
         }
       }
@@ -88,31 +106,130 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
               B: B,
               answer: randomNumber,
               checkAnswer: false,
-              isPick: false,pheptinh: context.read<PhepTinh>().phepTinh);
+              isPick: false,
+              pheptinh: context.read<PhepTinh>().phepTinh);
           lNumber.add(tmpNumber);
         }
       }
     }
     lNumber.shuffle();
   }
-  checkAnswer(int index){
-    if(lNumber[index].answer == (context.read<PhepTinh>().phepTinh ? answer : A)){
+
+  checkAnswer(int index) {
+    if (lNumber[index].answer ==
+        (context.read<PhepTinh>().phepTinh ? answer : A)) {
       lNumber[index].checkAnswer = true;
     }
     context.read<PhepTinh>().listAnswer.add(lNumber[index]);
+    ctl++;
+    startCountdown();
     setState(() {
-            born();
-            addAsnwer();
+      born();
+      addAsnwer();
     });
-    if(context.read<PhepTinh>().listAnswer.length >= 10){
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Result(manchoi: false),));
-        showDialog(
-          context: context, 
-          builder: (context) {
-            return ResultDialog();
-          },);
+    if (ctl >= 10) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Result(manchoi: false),
+      ));
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ResultDialog();
+        },
+      );
     }
   }
+
+  checkAnswer2(List<NumberModel> lNumbers) {
+    if (int.parse(context.read<PhepTinh>().answerDisplay) ==
+        (context.read<PhepTinh>().phepTinh ? answer : A)) {
+      answerNumber.checkAnswer = true;
+      context.read<PhepTinh>().listAnswer.add(answerNumber);
+    } else {
+      NumberModel tmp = context.read<PhepTinh>().phepTinh
+          ? NumberModel(
+              A: A,
+              B: B,
+              answer: int.parse(context.read<PhepTinh>().answerDisplay),
+              checkAnswer: false,
+              isPick: true,
+              pheptinh: context.read<PhepTinh>().phepTinh)
+          : NumberModel(
+              A: answer,
+              B: B,
+              answer: int.parse(context.read<PhepTinh>().answerDisplay),
+              checkAnswer: false,
+              isPick: true,
+              pheptinh: context.read<PhepTinh>().phepTinh);
+      context.read<PhepTinh>().listAnswer.add(tmp);
+    }
+    startCountdown();
+    context.read<PhepTinh>().getAnswerDisplay('');
+    amount = '';
+    setState(() {
+      born();
+      addAsnwer();
+      ctl++;
+    });
+    if (context.read<PhepTinh>().listAnswer.length >= 10) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Result(manchoi: false),
+      ));
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ResultDialog();
+        },
+      );
+      context.read<PhepTinh>().getAnswerDisplay('');
+      amount = '';
+    }
+  }
+
+  onKeyTap(val) {
+    amount = amount + val;
+    context.read<PhepTinh>().getAnswerDisplay(amount);
+  }
+
+  onBackPress() {
+    amount = amount.substring(0, amount.length - 1);
+    context.read<PhepTinh>().getAnswerDisplay(amount);
+  }
+  void startCountdown() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: context.read<PhepTinh>().tgtl), // Thời gian đếm ngược
+    );
+
+    _controller.reverse(from: 1.0);
+    
+    _controller.addListener(() {
+      setState(() {
+        percent = _controller.value;
+        if(percent == 0.0){
+          setState(() {
+          born();
+          addAsnwer();
+          percent = 1.0;
+          ctl++;
+          if (ctl >= 10) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Result(manchoi: false),
+      ));
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ResultDialog();
+        },
+      );
+    }
+          startCountdown();
+        });
+        }
+      });
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -120,6 +237,7 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
     born();
     addAsnwer();
     context.read<PhepTinh>().listAnswer = [];
+    startCountdown();
   }
 
   Widget build(BuildContext context) {
@@ -136,7 +254,7 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
         appBar: AppBar(
           title: GestureDetector(
             onTap: () {
-              print("${boxNumber.get(32)!.numberStar}");
+              print("lengthBox: ${boxNumber.get('data').length}");
             },
             child: Text(
               "Kiểm tra",
@@ -168,7 +286,7 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
             Padding(
                 padding: EdgeInsets.only(top: 20, right: 10),
                 child: Text(
-                  "1/10",
+                  "${ctl}/10",
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
@@ -181,6 +299,14 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
           width: double.infinity,
           child: Column(
             children: [
+              LinearPercentIndicator(
+                padding: EdgeInsets.zero,
+                lineHeight: 5,
+                backgroundColor: Colors.transparent,
+                progressColor: button,
+                percent: percent,
+                
+              ),
               SizedBox(
                 height: 30,
               ),
@@ -197,68 +323,208 @@ class _KiemTraPlayState extends State<KiemTraPlay> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w600),
                       ),
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: stroke,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: Center(
-                            child: Text(
-                          "?",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: stroke),
-                        )),
-                      ),
+                      context.read<PhepTinh>().typeAnswerKT
+                          ? Selector<PhepTinh, String>(
+                              selector: (ctx, state) => state.answerDisplay,
+                              builder: (context, value, _) {
+                                return Container(
+                                  height: 50,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: stroke,
+                                      width: 1,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    "${value}",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        color: stroke),
+                                  )),
+                                );
+                              },
+                            )
+                          : Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: stroke,
+                                  width: 1,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "?",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                    color: stroke),
+                              )),
+                            )
                     ],
                   )),
-               SizedBox(
+              SizedBox(
                 height: 150,
-               )   ,
-              Container(
-                  height: 350,
-                  width: 380,
-                  child: GridView.builder(
-                    itemCount: lNumber.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisExtent: 150,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 20),
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: (){
-                          checkAnswer(index);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: stroke,
-                              width: 1,
+              ),
+              context.read<PhepTinh>().typeAnswerKT
+                  ? Selector<PhepTinh, List<NumberModel>>(
+                      selector: (ctx, state) => state.lNumber,
+                      builder: (context, value, child) {
+                        return Container(
+                            height: 400,
+                            width: 350,
+                            child: GridView.builder(
+                              itemCount: 12,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      mainAxisExtent: 60,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 35),
+                              itemBuilder: (context, index) {
+                                if (index == 9) {
+                                  return GestureDetector(
+                                      onTap: () {
+                                        onBackPress();
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Wrong,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                        ),
+                                        child: Center(
+                                            child: Icon(
+                                          Icons.backspace_outlined,
+                                          color: Wrong,
+                                          size: 30,
+                                        )),
+                                      ));
+                                }
+                                if (index == 11) {
+                                  return GestureDetector(
+                                      onTap: () {
+                                        checkAnswer2(value);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: True,
+                                          border: Border.all(
+                                            color: stroke,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                        ),
+                                        child: Center(
+                                            child: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                          size: 30,
+                                        )),
+                                      ));
+                                }
+                                if (index == 10) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      onKeyTap("0");
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Yellow2,
+                                        border: Border.all(
+                                          color: stroke,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30)),
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        "0",
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.black),
+                                      )),
+                                    ),
+                                  );
+                                }
+                                return GestureDetector(
+                                  onTap: () {
+                                    onKeyTap((index + 1).toString());
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Yellow2,
+                                      border: Border.all(
+                                        color: stroke,
+                                        width: 1,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(30)),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "${index + 1}",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.black),
+                                    )),
+                                  ),
+                                );
+                              },
+                            ));
+                      })
+                  : Container(
+                      height: 350,
+                      width: 380,
+                      child: GridView.builder(
+                        itemCount: lNumber.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisExtent: 150,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 20),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              checkAnswer(index);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: stroke,
+                                  width: 1,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "${lNumber[index].answer}",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: !lNumber[index].isPick
+                                        ? Colors.black
+                                        : Colors.white),
+                              )),
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          child: Center(
-                              child: Text(
-                            "${lNumber[index].answer}",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: !lNumber[index].isPick
-                                    ? Colors.black
-                                    : Colors.white),
-                          )),
-                        ),
-                      );
-                    },
-                  ))
+                          );
+                        },
+                      ))
             ],
           ),
         ),

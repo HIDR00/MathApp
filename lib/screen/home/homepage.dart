@@ -19,14 +19,18 @@ class _HomePageState extends State<HomePage> {
   Box boxNumber = Hive.box(boxNumbers);
   bool isFetching = false;
   @override
-  void initState() {
-    super.initState();
-    if (boxNumber.length == 0) {
-      _fetchData(); // Bắt đầu tải dữ liệu nếu cần
+  fetch(){
+    var data = boxNumber.get('data');
+    if (data ==  null) {
+      _fetchData(); 
     } else {
       print("Data already available, don't fetch");
       _getData();
     }
+  }
+  void initState() {
+    super.initState();
+    fetch();
   }
   Future<void> _fetchData() async {
     setState(() {

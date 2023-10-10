@@ -60,7 +60,6 @@ class _LuyenTapState extends State<LuyenTap> {
     B = randomInRange(1, 10);
     indexImage = B.toString();
     answer = A * B;
-    print("kkq2: ${context.read<PhepTinh>().typeAnswer}");
     while (answer < kkq1 ||
         answer > kkq2 ||
         A < ks1 ||
@@ -269,6 +268,7 @@ class _LuyenTapState extends State<LuyenTap> {
     born();
     addAsnwer();
     context.read<PhepTinh>().listAnswer = [];
+    context.read<PhepTinh>().getTypeAnswerLT();
   }
 
   @override
@@ -334,7 +334,7 @@ class _LuyenTapState extends State<LuyenTap> {
                   width: 380,
                   decoration: BoxDecoration(
                       color: BGYellow, borderRadius: BorderRadius.circular(10)),
-                  child: Wrap(
+                  child: context.read<PhepTinh>().htk ? Wrap(
                       direction: Axis.horizontal,
                       children: List.generate(
                           A,
@@ -347,7 +347,8 @@ class _LuyenTapState extends State<LuyenTap> {
                                     child: Image(
                                         image: AssetImage(
                                             "assets/image/dice_${indexImage}.png"))),
-                              )))),
+                              ))) : Center(child: Text("Bảng tính \n cửu chương",textAlign: TextAlign.center,style: TextStyle(fontSize: 20),))
+                              ),
               SizedBox(
                 height: 10,
               ),
@@ -359,7 +360,7 @@ class _LuyenTapState extends State<LuyenTap> {
               SizedBox(
                 height: 80,
               ),
-              context.read<PhepTinh>().typeAnswer
+              context.read<PhepTinh>().typeAnswerLT
                   ? Container(
                       height: 400,
                       width: 380,
