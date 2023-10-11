@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "849322380987",
+    "project_id": "math-fa2e3",
+    "storage_bucket": "math-fa2e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849322380987:android:1f038676e917760909e39e",
+        "android_client_info": {
+          "package_name": "com.example.math"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0-Sl3ut1IBqzurZCVaZmIR7Ra2QvLjwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

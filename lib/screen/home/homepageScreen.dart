@@ -5,10 +5,13 @@ import 'package:math/provider/phepTinh_State.dart';
 import 'package:math/screen/bangtinh.dart';
 import 'package:math/screen/home/setting.dart';
 import 'package:math/screen/howtoplay.dart';
+import 'package:math/screen/language.dart';
 import 'package:math/screen/luyentap.dart';
+import 'package:math/screen/more_app.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../policy.dart';
 
@@ -64,18 +67,26 @@ class _HomePageScreenState extends State<HomePageScreen> {
                         ),
                     ),
                   ),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: stroke
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => Language()));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: stroke
+                        ),
+                        shape: BoxShape.circle
                       ),
-                      shape: BoxShape.circle
-                    ),
-                    child: Image(
-                      image: AssetImage('assets/images/image 14.png')
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: Image(
+                          image: AssetImage('assets/image/vi.png')
+                        ),
+                      ),
                     ),
                   )
                 ],
@@ -83,18 +94,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: GestureDetector(
-                onTap: () {
-                  print(context.read<PhepTinh>().lNumber.length);
-                  print(boxNumber.get('data').length);
-                  // print("tientrinh1: ${context.read<PhepTinh>().tienTrinh1}");
-                  // print("tientrinh2: ${context.read<PhepTinh>().tienTrinh2}");
-                },
-                child: Text("  Bảng tính\ncửu chương",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500
-                  ),
+              child: Text(AppLocalizations.of(context)!.bangtinhcuuchuong,
+              textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w500
                 ),
               ),
             ),
@@ -123,7 +127,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       Text("A x B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Color(0xFFFEFDF7) : Colors.black),),
                       Padding(
                         padding: const EdgeInsets.only(left: 8,top: 8),
-                        child: Text("${(context.read<PhepTinh>().tienTrinh1 *100).toInt()}%",style: TextStyle(fontSize: 18,color: widget.phepTinh ? Color(0xFFFEFDF7) : Colors.black)),
+                        child: Text("${(context.read<PhepTinh>().tienTrinh1 *100).toInt()}%",style: TextStyle(fontSize: 18,color:  Color(0xFFFEFDF7))),
                       )
                     ],
                   ),
@@ -152,7 +156,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       Text("A : B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Colors.black : Color(0xFFFEFDF7)),),
                       Padding(
                         padding: const EdgeInsets.only(left: 8,top: 8),
-                        child: Text("${(context.read<PhepTinh>().tienTrinh2 *100).toInt()}%",style: TextStyle(fontSize: 18,color: widget.phepTinh ? Colors.black : Color(0xFFFEFDF7))),
+                        child: Text("${(context.read<PhepTinh>().tienTrinh2 *100).toInt()}%",style: TextStyle(fontSize: 18,color:   Color(0xFFFEFDF7))),
                       )
                     ],
                   ),
@@ -182,7 +186,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               ),
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: Center(child: Text("Bảng tính",style: TextStyle(fontSize: 20),)),
+                            child: Center(child: Text(AppLocalizations.of(context)!.bangtinh,style: TextStyle(fontSize: 20),)),
                           ),
                         ),
             ),     
@@ -207,7 +211,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               ),
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: Center(child: Text("Luyện tập",style: TextStyle(fontSize: 20),)),
+                            child: Center(child: Text(AppLocalizations.of(context)!.luyentap,style: TextStyle(fontSize: 20),)),
                           ),
                         ),
             ),     
@@ -232,7 +236,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               ),
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: Center(child: Text("Kiểm tra",style: TextStyle(fontSize: 20),)),
+                            child: Center(child: Text(AppLocalizations.of(context)!.kiemtra,style: TextStyle(fontSize: 20),)),
                           ),
                         ),
             ),     
@@ -256,7 +260,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               ),
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: Center(child: Text("Trò chơi rèn luyện",style: TextStyle(fontSize: 20),)),
+                            child: Center(child: Text(AppLocalizations.of(context)!.trochoirenluyen,style: TextStyle(fontSize: 20),)),
                           ),
                         ),
             ),     
@@ -317,6 +321,25 @@ class _HomePageScreenState extends State<HomePageScreen> {
                           ),
                         ),
                       ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoreApp()));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: stroke
+                          ),
+                          shape: BoxShape.circle
+                        ),
+                        child: Image(
+                          image: AssetImage('assets/image/path6.png'),
+                        )  
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {

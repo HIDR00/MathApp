@@ -97,7 +97,7 @@ class _DanhSachState extends State<DanhSach> {
                                 child: Icon(Icons.close_outlined,color: Wrong,),
                               ),
                               SizedBox(width: 80,),
-                              Text("${context.read<PhepTinh>().listAnswer[index].A} ${context.read<PhepTinh>().phepTinh ? "x" : ":"} ${context.read<PhepTinh>().listAnswer[index].B} = ${context.read<PhepTinh>().listAnswer[index].answer}",
+                              Text("${context.read<PhepTinh>().listAnswer[index].A} ${context.read<PhepTinh>().phepTinh ? "x" : ":"} ${context.read<PhepTinh>().listAnswer[index].B} = ${context.read<PhepTinh>().listAnswer[index].answer == -1 ? "?" : context.read<PhepTinh>().listAnswer[index].answer}",
                               style: TextStyle(
                                 color: Wrong,
                               ),

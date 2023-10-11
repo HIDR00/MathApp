@@ -16,17 +16,17 @@ class PhepTinh extends ChangeNotifier{
   late double _tienTrinh1 = 0;
   late double _tienTrinh2 = 0;
   String _answerDisplay = '';
-  
+  int _indexLanguage = 0;
 
   // setting
   int _kkq1 = 0;
   int _kkq2 = 90000;
   bool _kkq3 = false;
   int _ks1 = 0;
-  int _ks2 = 90000;
+  int _ks2 = 10;
   bool _typeAnswerKT = true;
   bool _typeAnswerLT = true;
-  int _ctl2 = 0;
+  int _ctl2 = 100;
   bool _htk = false;
   int _tgtl = 10;
 
@@ -82,7 +82,6 @@ class PhepTinh extends ChangeNotifier{
     }else{
        _typeAnswerLT = true;
     }
-    notifyListeners();
   }
   void updateClt2(int newValue) {
     _ctl2 = newValue;
@@ -90,7 +89,6 @@ class PhepTinh extends ChangeNotifier{
   }
   void updatehtk(bool newValue) {
     _htk = newValue;
-    notifyListeners(); 
   }
   void updateTgtl(int newValue) {
     _tgtl = newValue;
@@ -102,7 +100,7 @@ class PhepTinh extends ChangeNotifier{
   AnimationController get controller => _controller;
   bool get phepTinh => _pheptinh;
   List<NumberModel> get lNumber => List.from(_lNumber);
-
+  int get indexLanguage => _indexLanguage;
   void startAnimation(value){
     if (controller.status == value) {
       controller.reverse();
@@ -117,6 +115,10 @@ class PhepTinh extends ChangeNotifier{
   set phepTinh(bool value){
     _pheptinh =  value;
     print(_pheptinh);
+    notifyListeners();
+  }
+  void updateIndexLanguage(int value){
+    _indexLanguage =  value;
     notifyListeners();
   }
   getTienTrinh(){
@@ -141,7 +143,6 @@ class PhepTinh extends ChangeNotifier{
     print("dem: ${dem}");
     print("Sum: ${sum1}, pheptinh: ${5*288}");
     print("tientrinh: ${(_tienTrinh1*100).toInt()}");
-    notifyListeners();
   }
   fetch(){
     for(int i = 0;i < 12;i++){
@@ -154,7 +155,6 @@ class PhepTinh extends ChangeNotifier{
     }
     boxNumber.put("data", _lNumber);
     print("lengthBox: ${boxNumber.get('data').length}");
-    notifyListeners();
   }
   getData(){
     _lNumber = [];
@@ -163,7 +163,6 @@ class PhepTinh extends ChangeNotifier{
       _lNumber.add(i);
     }
     print("lengtNumber: ${_lNumber.length}");
-    notifyListeners();
   }
   xoaTIenTrinh(){
     _lNumber = [];

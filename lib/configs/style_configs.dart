@@ -10,3 +10,8 @@ const Color True = Color(0xFF73C08F);
 const Color button = Color(0xFFFEB704);
 
 const String boxNumbers = 'boxNumbers';
+const List<String> supportedLanguage = ['en','vi'];
+const Map<String,String> languageCodeToName = {
+  "en" : "English",
+  "vi" : "Tiếng việt",
+};

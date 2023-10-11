@@ -24,10 +24,6 @@ class _SettingState extends State<Setting> {
   TextEditingController tgtl = TextEditingController();
   FocusNode kkq2FocusNode = FocusNode();
   FocusNode kkq1FocusNode = FocusNode();
-  FocusNode ks1FocusNode = FocusNode();
-  FocusNode ks2FocusNode = FocusNode();
-  FocusNode ctl2FocusNode = FocusNode();
-  FocusNode tgtl1FocusNode = FocusNode();
   @override
   check() {
     print("check: ${kkq1.text}");
@@ -347,7 +343,6 @@ class _SettingState extends State<Setting> {
                                         borderSide: BorderSide.none,
                                       ),
                                     ),
-                                    focusNode: ks1FocusNode,
                                     onEditingComplete: () {
                                       try {
                                         context
@@ -356,7 +351,6 @@ class _SettingState extends State<Setting> {
                                       } catch (e) {
                                         print(e);
                                       }
-                                      ks1FocusNode.unfocus();
                                     },
                                   ),
                                 ),
@@ -379,7 +373,6 @@ class _SettingState extends State<Setting> {
                                         borderSide: BorderSide.none,
                                       ),
                                     ),
-                                    focusNode: ks2FocusNode,
                                     onEditingComplete: () {
                                       try {
                                         context
@@ -388,7 +381,6 @@ class _SettingState extends State<Setting> {
                                       } catch (e) {
                                         print(e);
                                       }
-                                      ks2FocusNode.unfocus();
                                     },
                                   ),
                                 ),
@@ -473,7 +465,6 @@ class _SettingState extends State<Setting> {
                                           borderSide: BorderSide.none,
                                         ),
                                       ),
-                                      focusNode: ctl2FocusNode,
                                       onEditingComplete: () {
                                         try {
                                           context
@@ -482,7 +473,6 @@ class _SettingState extends State<Setting> {
                                         } catch (e) {
                                           print(e);
                                         }
-                                        ctl2FocusNode.unfocus();
                                       },
                                     ),
                                   );
@@ -580,7 +570,6 @@ class _SettingState extends State<Setting> {
                                             borderSide: BorderSide.none,
                                           ),
                                         ),
-                                        focusNode: tgtl1FocusNode,
                                         onEditingComplete: () {
                                           try {
                                             context
@@ -589,7 +578,6 @@ class _SettingState extends State<Setting> {
                                           } catch (e) {
                                             print(e);
                                           }
-                                          tgtl1FocusNode.unfocus();
                                         },
                                       ),
                                     ),

@@ -17,8 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Box boxNumber = Hive.box(boxNumbers);
-  bool isFetching = false;
-  @override
+  bool isFetching = true;
   fetch(){
     var data = boxNumber.get('data');
     if (data ==  null) {
@@ -33,18 +32,13 @@ class _HomePageState extends State<HomePage> {
     fetch();
   }
   Future<void> _fetchData() async {
-    setState(() {
-      isFetching = true; // Bắt đầu tải dữ liệu
-    });
 
     try {
       await context.read<PhepTinh>().fetch(); // Tải dữ liệu
     } catch (error) {
       print("Error fetching data: $error"); // Xử lý lỗi nếu có
     } finally {
-      setState(() {
         isFetching = false; // Kết thúc tải dữ liệu, cho phép cập nhật giao diện
-      });
       print("done");
       // Sau khi tải xong dữ liệu, gọi getData()
     }
@@ -58,11 +52,7 @@ class _HomePageState extends State<HomePage> {
     return Selector<PhepTinh, bool>(
       selector: (ctx, state) => state.phepTinh,
       builder: (ctx, value, _) {
-        if (isFetching) {
-          return CircularProgressIndicator(); // Hiển thị tiến trình tải dữ liệu
-        } else {
-          return HomePageScreen(phepTinh: value); // Hiển thị giao diện người dùng sau khi dữ liệu đã sẵn sàng
-        }
+          return HomePageScreen(phepTinh: value);
       },
     );
   }

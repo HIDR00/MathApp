@@ -56,8 +56,8 @@ class _LuyenTapState extends State<LuyenTap> {
     kkq2 = context.read<PhepTinh>().kkq2;
     ks1 = context.read<PhepTinh>().ks1;
     ks2 = context.read<PhepTinh>().ks2;
-    A = randomInRange(1, 10);
-    B = randomInRange(1, 10);
+    A = randomInRange(ks1, ks2);
+    B = randomInRange(ks1, ks2);
     indexImage = B.toString();
     answer = A * B;
     while (answer < kkq1 ||
@@ -83,6 +83,11 @@ class _LuyenTapState extends State<LuyenTap> {
             checkAnswer: false,
             isPick: false,
             pheptinh: context.read<PhepTinh>().phepTinh);
+    if(A > 12 || B > 10){
+      context.read<PhepTinh>().updatehtk(false);
+    }else{
+      context.read<PhepTinh>().updatehtk(true);
+    }
   }
 
   addAsnwer() {

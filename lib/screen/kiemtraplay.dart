@@ -141,7 +141,7 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
   }
 
   checkAnswer2(List<NumberModel> lNumbers) {
-    if (int.parse(context.read<PhepTinh>().answerDisplay) ==
+    if (context.read<PhepTinh>().answerDisplay != '' && int.parse(context.read<PhepTinh>().answerDisplay) ==
         (context.read<PhepTinh>().phepTinh ? answer : A)) {
       answerNumber.checkAnswer = true;
       context.read<PhepTinh>().listAnswer.add(answerNumber);
@@ -150,14 +150,14 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
           ? NumberModel(
               A: A,
               B: B,
-              answer: int.parse(context.read<PhepTinh>().answerDisplay),
+              answer: context.read<PhepTinh>().answerDisplay == '' ? -1 : int.parse(context.read<PhepTinh>().answerDisplay),
               checkAnswer: false,
               isPick: true,
               pheptinh: context.read<PhepTinh>().phepTinh)
           : NumberModel(
               A: answer,
               B: B,
-              answer: int.parse(context.read<PhepTinh>().answerDisplay),
+              answer: context.read<PhepTinh>().answerDisplay == '' ? -1 : int.parse(context.read<PhepTinh>().answerDisplay),
               checkAnswer: false,
               isPick: true,
               pheptinh: context.read<PhepTinh>().phepTinh);
@@ -192,7 +192,11 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
   }
 
   onBackPress() {
-    amount = amount.substring(0, amount.length - 1);
+    if(amount.length > 0){
+      amount = amount.substring(0, amount.length - 1);
+    }else{
+      amount = '';
+    }
     context.read<PhepTinh>().getAnswerDisplay(amount);
   }
   void startCountdown() {
@@ -240,6 +244,10 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
     startCountdown();
   }
 
+   void dispose() {
+    _controller.dispose(); 
+    super.dispose();
+  }
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
