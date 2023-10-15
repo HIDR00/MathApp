@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:math/provider/phepTinh_State.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../configs/style_configs.dart';
@@ -13,6 +15,20 @@ class MoreApp extends StatefulWidget {
 }
 
 class _MoreAppState extends State<MoreApp> {
+  bool isLoading = true;
+  @override
+  void fetchData() async {
+  // Fetch data from Firebase
+  await context.read<PhepTinh>().fetchDataFireBase();
+  isLoading = false;
+  setState(() {}); // This triggers a rebuild of the UI
+}
+
+  void initState() {
+  super.initState();
+  fetchData();
+  isLoading = true;
+}
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -52,60 +68,79 @@ class _MoreAppState extends State<MoreApp> {
                 ),
               ),
           ),
-          body: ListView.builder(
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image(image: AssetImage('assets/images/Group 3109.png')),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("English Vocab"),
-                            Wrap(
-                            direction: Axis.horizontal,
-                            children: List.generate(
-                                5,
-                                (index) => Icon(Icons.star, color: Color(0xFFeeab04)))),
-                            Row(
-                              children: [
-                                Image(image: AssetImage('assets/image/Download.png')),
-                                Text("1621")
-                              ],
-                            )
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: ()async {
-                  final likeUrl = Uri.parse('https://play.google.com/store/apps/details?id=vn.techlead.android.game.findword');
-                      if(await canLaunchUrl(likeUrl)){
-                        await launchUrl(likeUrl);
-                      }
-                },
-                          child: Container(
-                            height: 40,
-                            width: 60,
+          body:
+            
+           Stack(
+             children: [ListView.builder(
+              itemCount: context.read<PhepTinh>().listApp.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: 70,
+                            width: 70,
                             decoration: BoxDecoration(
-                              color: Color(0xFFFEB704),
-                              border: Border.all(color: stroke,width: 1),
-                              borderRadius: BorderRadius.circular(30)
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.amber,
+                              image: DecorationImage(image: NetworkImage(context.read<PhepTinh>().listApp[index].image))
                             ),
-                            child: Center(child: Text("GET",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700),)),
                           ),
-                        )
-                      ],
-                    ),
-                    Divider(color: Color(0xFFDCDCDC),thickness: 1,)
-                  ],
-                ),
-              );
-            },
-          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(context.read<PhepTinh>().listApp[index].Name),
+                              Wrap(
+                              direction: Axis.horizontal,
+                              children: List.generate(
+                                 5,
+                                  (index1) => Icon(Icons.star, color: index1 <= int.parse(context.read<PhepTinh>().listApp[index].numberStar) ? Color(0xFFeeab04) : Colors.grey))),
+                              Row(
+                                children: [
+                                  Image(image: AssetImage('assets/image/Download.png')),
+                                  Text(context.read<PhepTinh>().listApp[index].numberDowload)
+                                ],
+                              )
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: ()async {
+                    final likeUrl = Uri.parse(context.read<PhepTinh>().listApp[index].url);
+                        if(await canLaunchUrl(likeUrl)){
+                          await launchUrl(likeUrl);
+                        }
+                  },
+                            child: Container(
+                              height: 40,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                color: Color(0xFFFEB704),
+                                border: Border.all(color: stroke,width: 1),
+                                borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: Center(child: Text("GET",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700),)),
+                            ),
+                          )
+                        ],
+                      ),
+                      Divider(color: Color(0xFFDCDCDC),thickness: 1,)
+                    ],
+                  ),
+                );
+              },
+             ),
+             Visibility(
+                visible: isLoading,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Yellow2,
+                  ),))
+             ],
+           ),
         )
       ],
     );

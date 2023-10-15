@@ -94,11 +94,17 @@ class _HomePageScreenState extends State<HomePageScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: Text(AppLocalizations.of(context)!.bangtinhcuuchuong,
-              textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500
+              child: GestureDetector(
+                onTap: () {
+                  // context.read<PhepTinh>().signInWithEmailAndPassword("tdt@gmail.com","123456");
+                  context.read<PhepTinh>().fetchDataFireBase();
+                },
+                child: Text(AppLocalizations.of(context)!.bangtinhcuuchuong,
+                textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500
+                  ),
                 ),
               ),
             ),

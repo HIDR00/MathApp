@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+import 'package:math/model/moreApp.dart';
 import 'package:math/model/number_model.dart';
 
 import '../configs/style_configs.dart';
@@ -17,7 +21,7 @@ class PhepTinh extends ChangeNotifier{
   late double _tienTrinh2 = 0;
   String _answerDisplay = '';
   int _indexLanguage = 0;
-
+  List<moreApp> listApp = [];
   // setting
   int _kkq1 = 0;
   int _kkq2 = 90000;
@@ -181,5 +185,43 @@ class PhepTinh extends ChangeNotifier{
   void putdata() {
     boxNumber.put('data', lNumber);
     notifyListeners();
+  }
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    // You can access the user with userCredential.user in newer versions of Firebase.
+    // In older versions, it may be userCredential.user.
+    User? user = userCredential.user;
+
+    // Get the user's ID token
+    String? idToken = await user?.getIdToken();
+    print("idToken: ${idToken}");
+
+  } catch (e) {
+    print('Login error: $e');
+  }
+}
+
+
+
+
+  fetchDataFireBase() async {
+      listApp = [];
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('moreApp').get();
+        for (QueryDocumentSnapshot document in querySnapshot.docs) {
+          String name = document['Name'];
+          String image = document['image'];
+          String numberDownload = document['numberDownLoad'];
+          String numberStar = document['numberStar'];
+          String url = document['url'];
+          moreApp tmp = moreApp(Name: name, image: image, numberDowload: numberDownload, numberStar: numberStar,url: url);
+          listApp.add(tmp);
+          print(name);
+        }
+        print("length: ${listApp.length}");
+        return listApp;
   }
 }
