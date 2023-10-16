@@ -163,14 +163,6 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
               pheptinh: context.read<PhepTinh>().phepTinh);
       context.read<PhepTinh>().listAnswer.add(tmp);
     }
-    startCountdown();
-    context.read<PhepTinh>().getAnswerDisplay('');
-    amount = '';
-    setState(() {
-      born();
-      addAsnwer();
-      ctl++;
-    });
     if (context.read<PhepTinh>().listAnswer.length >= 10) {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Result(manchoi: false),
@@ -183,6 +175,15 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
       );
       context.read<PhepTinh>().getAnswerDisplay('');
       amount = '';
+    }else{
+      startCountdown();
+      context.read<PhepTinh>().getAnswerDisplay('');
+      amount = '';
+      setState(() {
+        born();
+        addAsnwer();
+        ctl++;
+      });
     }
   }
 
@@ -214,6 +215,8 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
           setState(() {
           born();
           addAsnwer();
+          amount = '';
+          context.read<PhepTinh>().getAnswerDisplay(amount);
           percent = 1.0;
           ctl++;
           if (ctl >= 10) {

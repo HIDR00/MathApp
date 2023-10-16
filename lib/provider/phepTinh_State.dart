@@ -14,6 +14,7 @@ import '../configs/style_configs.dart';
 class PhepTinh extends ChangeNotifier{
   bool _pheptinh = true;
   List<NumberModel> _lNumber = [];
+  List<NumberModel> _lNumberTienTrinh = [];
   List<NumberModel> listAnswer = [];
   late AnimationController _controller;
   Box boxNumber = Hive.box(boxNumbers);
@@ -125,7 +126,19 @@ class PhepTinh extends ChangeNotifier{
     _indexLanguage =  value;
     notifyListeners();
   }
+  getListTienTrinh(){
+    _lNumberTienTrinh = [];
+    for(int i = ks1;i < ks2;i++){
+      for(int j = ks1;j < ks2;j++){
+        NumberModel tmpChan = NumberModel(A: i, B: j, answer: i*j, checkAnswer: false, isPick: false,pheptinh: true);
+        NumberModel tmpLe = NumberModel(A: i*j, B: j, answer: i, checkAnswer: false, isPick: false,pheptinh: false);
+        _lNumberTienTrinh.add(tmpChan);
+        _lNumberTienTrinh.add(tmpLe);
+      }
+    }
+  }
   getTienTrinh(){
+    getListTienTrinh();
     double sum1 = 0;
     double sum2 = 0;
     int dem = 0;
@@ -135,18 +148,20 @@ class PhepTinh extends ChangeNotifier{
       if(i.numberStar > 5){
         i.numberStar = 5;
       }
-      if(i.pheptinh){
+      if(i.pheptinh && i.A >= ks1 && i.A <= ks2 && i.B >= ks1 && i.B <= ks2){
+        print("A: ${i.A},B: ${i.B}");
+        print("numberStar: ${i.numberStar}");
         dem++;
         sum1 = sum1 + i.numberStar;
-      }else{
+      }else if(i.pheptinh == false && i.answer >= ks1 && i.answer <= ks2 && i.B >= ks1 && i.B <= ks2){
         sum2 = sum2 + i.numberStar;
       }
     }
-    _tienTrinh1 = sum1 / (5 * 144);
-    _tienTrinh2 = sum2 / (5 * 144);
-    print("dem: ${dem}");
-    print("Sum: ${sum1}, pheptinh: ${5*288}");
-    print("tientrinh: ${(_tienTrinh1*100).toInt()}");
+    double length = _lNumberTienTrinh.length * 1.0;
+    _tienTrinh1 = sum1 / (5 * length);
+    _tienTrinh2 = sum2 / (5 * length);
+    print("Sum1 :${sum1},length: ${5*length}");
+    print("tientrinh: ${_tienTrinh1}");
   }
   fetch(){
     for(int i = 0;i < 12;i++){

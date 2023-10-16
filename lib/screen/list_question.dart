@@ -53,7 +53,7 @@ class _DanhSachState extends State<DanhSach> {
             ),
           ),
           body: Padding(
-            padding: EdgeInsets.only(left: 15,top: 30),
+            padding: EdgeInsets.only(left: 15,top: 30,bottom: 20),
             child: Container(
                   height: 700,
                   width: 380,

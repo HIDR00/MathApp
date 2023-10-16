@@ -61,7 +61,7 @@ class _LuyenTapState extends State<LuyenTap> {
     indexImage = B.toString();
     answer = A * B;
     while (answer < kkq1 ||
-        answer > kkq2 ||
+        answer > kkq2 ||  (context.read<PhepTinh>().phepTinh == false && (A * B == 0)) ||
         A < ks1 ||
         A > ks2 ||
         B < ks1 ||
@@ -83,7 +83,10 @@ class _LuyenTapState extends State<LuyenTap> {
             checkAnswer: false,
             isPick: false,
             pheptinh: context.read<PhepTinh>().phepTinh);
-    if(A > 12 || B > 10){
+    while(lNumber.contains(answerNumber)){
+      born();
+    }
+    if(A > 12 || B > 10 || A <=0 || B <= 0){
       context.read<PhepTinh>().updatehtk(false);
     }else{
       context.read<PhepTinh>().updatehtk(true);
@@ -170,6 +173,9 @@ class _LuyenTapState extends State<LuyenTap> {
             return ResultDialog();
           },
         );
+      }
+      if (A >= context.read<PhepTinh>().ks1 && A <= context.read<PhepTinh>().ks2 && B >= context.read<PhepTinh>().ks1 && B <= context.read<PhepTinh>().ks2) {
+        
       }
       if (A >= 0 && A <= 11 && B >= 0 && B <= 11) {
         context.read<PhepTinh>().phepTinh
