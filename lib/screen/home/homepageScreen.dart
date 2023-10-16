@@ -8,6 +8,7 @@ import 'package:math/screen/howtoplay.dart';
 import 'package:math/screen/language.dart';
 import 'package:math/screen/luyentap.dart';
 import 'package:math/screen/more_app.dart';
+import 'package:math/screen/training_game.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -250,6 +251,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               padding: const EdgeInsets.only(top: 30),
               child: GestureDetector(
                 onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => Training()));
                 },
                     child: Container(
                             height: 60,

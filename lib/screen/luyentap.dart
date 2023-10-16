@@ -278,7 +278,8 @@ class _LuyenTapState extends State<LuyenTap> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Stack(
+      children: [
       Container(
         decoration: BoxDecoration(
             image: DecorationImage(
