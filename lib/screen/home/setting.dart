@@ -29,11 +29,21 @@ class _SettingState extends State<Setting> {
   FocusNode ctl2FocusNode = FocusNode();
   FocusNode tgt1FocusNode = FocusNode();
   @override
+  int gcdEuclidean(int a, int b) {
+    while (b != 0) {
+      final t = b;
+      b = a % b;
+      a = t;
+    }
+    return a;
+  }
+  
   check() {
-    print("check: ${kkq1.text}");
-    if (int.parse(kkq1.text.trim()) >= int.parse(kkq2.text.trim()) || int.parse(ks1.text.trim()) >= int.parse(ks2.text.trim())) {
+    int A = int.parse(ks1.text.trim());
+    int B = int.parse(ks2.text.trim());
+    if (int.parse(kkq1.text.trim()) >= int.parse(kkq2.text.trim()) || A >= B) {
       return false;
-    }else if(int.parse(ks2.text.trim()) - int.parse(ks1.text.trim()) <= 5){
+    }else if((B - A+1) *(B - A+1) < 10){
       return false;
     }
     return true;
@@ -240,8 +250,7 @@ class _SettingState extends State<Setting> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20),
                                     decoration: InputDecoration(
-                                      focusedBorder: InputBorder.none,
-                                      enabledBorder: InputBorder.none
+                                      border: InputBorder.none,
                                     ),
                                     focusNode: kkq1FocusNode,
                                     onEditingComplete: () {
@@ -274,8 +283,7 @@ class _SettingState extends State<Setting> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20),
                                     decoration: InputDecoration(
-                                      focusedBorder: InputBorder.none,
-                                      enabledBorder: InputBorder.none
+                                      border: InputBorder.none
                                     ),
                                     focusNode: kkq2FocusNode,
                                     onEditingComplete: () {
@@ -351,6 +359,8 @@ class _SettingState extends State<Setting> {
                                         context
                                             .read<PhepTinh>()
                                             .updateKs1(int.parse(ks1.text));
+                                        context
+                                            .read<PhepTinh>().getTienTrinh();
                                       } catch (e) {
                                         print(e);
                                       }
@@ -383,6 +393,8 @@ class _SettingState extends State<Setting> {
                                         context
                                             .read<PhepTinh>()
                                             .updateKs2(int.parse(ks2.text));
+                                        context
+                                            .read<PhepTinh>().getTienTrinh();
                                       } catch (e) {
                                         print(e);
                                       }

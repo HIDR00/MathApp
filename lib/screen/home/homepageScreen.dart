@@ -45,8 +45,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            SizedBox(
+              height: 30,
+            ),
             Padding(
-              padding: const EdgeInsets.only(top: 60,left: 20,right: 20),
+              padding: const EdgeInsets.only(left: 10,right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -100,91 +103,83 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: GestureDetector(
-                onTap: () {
-                  // context.read<PhepTinh>().signInWithEmailAndPassword("tdt@gmail.com","123456");
-                  context.read<PhepTinh>().fetchDataFireBase();
-                },
-                child: Text(AppLocalizations.of(context)!.bangtinhcuuchuong,
-                textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ),
+            SizedBox(
+              height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: Selector<PhepTinh,Tuple2<double,double>>(
-                selector: (ctx, state) => Tuple2(state.tienTrinh1, state.tienTrinh1),
-                    builder: (ctx, value, _) {
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                GestureDetector(
-                  onTap: (){
-                    context.read<PhepTinh>().phepTinh = true;
-                  },
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: widget.phepTinh ? Color(0xFF73C08F) : Color(0xFFFEFDF7),
-                      boxShadow:[
-                        BoxShadow(color: Color(0xFFE7D7BE),offset: Offset(0, 5))
-                      ],
-                      shape: BoxShape.circle
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("A x B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Color(0xFFFEFDF7) : Colors.black),),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8,top: 8),
-                          child: Text("${(context.read<PhepTinh>().tienTrinh1 *100).toInt()}%",style: TextStyle(fontSize: 18,color:  Color(0xFFFEFDF7))),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                GestureDetector(
-                  onTap: (){
-                    context.read<PhepTinh>().phepTinh = false;
-                  },
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: widget.phepTinh ? Color(0xFFFEFDF7) : Color(0xFF73C08F) ,
-                      boxShadow:[
-                        BoxShadow(color: Color(0xFFE7D7BE),offset: Offset(0, 5))
-                      ],
-                      shape: BoxShape.circle
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("A : B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Colors.black : Color(0xFFFEFDF7)),),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8,top: 8),
-                          child: Text("${(context.read<PhepTinh>().tienTrinh2 *100).toInt()}%",style: TextStyle(fontSize: 18,color:   Color(0xFFFEFDF7))),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                          ],
-                );
-                    }
+            Text(AppLocalizations.of(context)!.bangtinhcuuchuong,
+            textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500
               ),
             ),
             SizedBox(height: 10,),
+            Selector<PhepTinh,Tuple2<double,double>>(
+              selector: (ctx, state) => Tuple2(state.tienTrinh1, state.tienTrinh1),
+                  builder: (ctx, value, _) {
+                    return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+              GestureDetector(
+                onTap: (){
+                  context.read<PhepTinh>().phepTinh = true;
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: widget.phepTinh ? Color(0xFF73C08F) : Color(0xFFFEFDF7),
+                    boxShadow:[
+                      BoxShadow(color: Color(0xFFE7D7BE),offset: Offset(0, 5))
+                    ],
+                    shape: BoxShape.circle
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("A x B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Color(0xFFFEFDF7) : Colors.black),),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8,top: 8),
+                        child: Text("${(context.read<PhepTinh>().tienTrinh1 *100).toInt()}%",style: TextStyle(fontSize: 18,color:  Color(0xFFFEFDF7))),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 40,
+              ),
+              GestureDetector(
+                onTap: (){
+                  context.read<PhepTinh>().phepTinh = false;
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: widget.phepTinh ? Color(0xFFFEFDF7) : Color(0xFF73C08F) ,
+                    boxShadow:[
+                      BoxShadow(color: Color(0xFFE7D7BE),offset: Offset(0, 5))
+                    ],
+                    shape: BoxShape.circle
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("A : B",style: TextStyle(fontSize: 20,color: widget.phepTinh ? Colors.black : Color(0xFFFEFDF7)),),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8,top: 8),
+                        child: Text("${(context.read<PhepTinh>().tienTrinh2 *100).toInt()}%",style: TextStyle(fontSize: 18,color:   Color(0xFFFEFDF7))),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+                        ],
+              );
+                  }
+            ),
+            SizedBox(height: 30,),
             GestureDetector(
               onTap: (){
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) => BangTinh(phepTinh: widget.phepTinh,)));
@@ -402,6 +397,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
               ],
             )
+            
           ],
         ),
       ),

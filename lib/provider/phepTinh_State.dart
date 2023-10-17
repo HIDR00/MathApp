@@ -33,7 +33,7 @@ class PhepTinh extends ChangeNotifier{
   bool _typeAnswerLT = true;
   int _ctl2 = 100;
   bool _htk = false;
-  int _tgtl = 10;
+  int _tgtl = 1;
 
   int get kkq1 => _kkq1;
   int get kkq2 => _kkq2;

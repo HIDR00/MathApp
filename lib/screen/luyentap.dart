@@ -24,6 +24,7 @@ class _LuyenTapState extends State<LuyenTap> {
   late int ks1;
   late int ks2;
   List<NumberModel> lNumber = [];
+  List<String> lQuestion = [];
   late NumberModel answerNumber;
   bool _checkAnswer = false;
   int questionLength = 0;
@@ -83,14 +84,18 @@ class _LuyenTapState extends State<LuyenTap> {
             checkAnswer: false,
             isPick: false,
             pheptinh: context.read<PhepTinh>().phepTinh);
-    while(lNumber.contains(answerNumber)){
-      born();
-    }
     if(A > 12 || B > 10 || A <=0 || B <= 0){
       context.read<PhepTinh>().updatehtk(false);
     }else{
       context.read<PhepTinh>().updatehtk(true);
     }
+    String question = A.toString() + (context.read<PhepTinh>().phepTinh ? 'x' : ':') + B.toString();
+      print("question: ${question}");
+      if(lQuestion.contains(question)){
+        print('check');
+        born();
+      }
+      lQuestion.add(question);
   }
 
   addAsnwer() {

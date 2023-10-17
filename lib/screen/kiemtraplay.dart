@@ -27,6 +27,7 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
   late int answer;
   List<NumberModel> lNumber = [];
   List<int> lAnswer = [];
+  List<String> lQuestion = [];
   late NumberModel answerNumber;
   String amount = '';
    late AnimationController _controller;
@@ -72,12 +73,19 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
             checkAnswer: false,
             isPick: false,
             pheptinh: context.read<PhepTinh>().phepTinh);
+      String question = A.toString() + (context.read<PhepTinh>().phepTinh ? 'x' : ':') + B.toString();
+      print("question: ${question}");
+      lQuestion.add(question);
+      if(lQuestion.contains(question)){
+        print('check');
+        born();
+      }else{
+        return;
+      }
   }
 
   addAsnwer() {
     NumberModel tmpNumber;
-    lNumber = [];
-    lAnswer = [];
     lNumber.add(answerNumber);
     if (context.read<PhepTinh>().phepTinh) {
       lAnswer.add(answer);
@@ -143,9 +151,11 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
   checkAnswer2(List<NumberModel> lNumbers) {
     if (context.read<PhepTinh>().answerDisplay != '' && int.parse(context.read<PhepTinh>().answerDisplay) ==
         (context.read<PhepTinh>().phepTinh ? answer : A)) {
+          print('true');
       answerNumber.checkAnswer = true;
       context.read<PhepTinh>().listAnswer.add(answerNumber);
     } else {
+      print("false");
       NumberModel tmp = context.read<PhepTinh>().phepTinh
           ? NumberModel(
               A: A,
@@ -212,14 +222,11 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
       setState(() {
         percent = _controller.value;
         if(percent == 0.0){
+          context.read<PhepTinh>().typeAnswerKT ? checkAnswer2(context.read<PhepTinh>().lNumber) : checkAnswer(ctl-1);
           setState(() {
-          born();
-          addAsnwer();
-          amount = '';
           context.read<PhepTinh>().getAnswerDisplay(amount);
           percent = 1.0;
-          ctl++;
-          if (ctl >= 10) {
+          if (ctl > 10) {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Result(manchoi: false),
       ));
@@ -245,6 +252,7 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
     addAsnwer();
     context.read<PhepTinh>().listAnswer = [];
     startCountdown();
+    lNumber = [];
   }
 
    void dispose() {
