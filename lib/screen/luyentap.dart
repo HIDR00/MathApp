@@ -145,6 +145,7 @@ class _LuyenTapState extends State<LuyenTap> {
         (context.read<PhepTinh>().phepTinh ? answer : A)) {
       if (!lNumber[index].isPick) {
         context.read<PhepTinh>().listAnswer.add(lNumber[index]);
+        context.read<PhepTinh>().listPlayed.add(lNumber[index]);
       }
       if (questionLength < 9) {
         context.read<PhepTinh>().startAnimation(AnimationStatus.completed);

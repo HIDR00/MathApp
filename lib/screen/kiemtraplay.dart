@@ -75,13 +75,11 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
             pheptinh: context.read<PhepTinh>().phepTinh);
       String question = A.toString() + (context.read<PhepTinh>().phepTinh ? 'x' : ':') + B.toString();
       print("question: ${question}");
-      lQuestion.add(question);
       if(lQuestion.contains(question)){
         print('check');
         born();
-      }else{
-        return;
       }
+      lQuestion.add(question);
   }
 
   addAsnwer() {

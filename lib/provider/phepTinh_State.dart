@@ -16,6 +16,7 @@ class PhepTinh extends ChangeNotifier{
   List<NumberModel> _lNumber = [];
   List<NumberModel> _lNumberTienTrinh = [];
   List<NumberModel> listAnswer = [];
+  List<NumberModel> listPlayed = [];
   late AnimationController _controller;
   Box boxNumber = Hive.box(boxNumbers);
   late double _tienTrinh1 = 0;
@@ -33,7 +34,7 @@ class PhepTinh extends ChangeNotifier{
   bool _typeAnswerLT = true;
   int _ctl2 = 100;
   bool _htk = false;
-  int _tgtl = 1;
+  int _tgtl = 10;
 
   int get kkq1 => _kkq1;
   int get kkq2 => _kkq2;
@@ -166,10 +167,10 @@ class PhepTinh extends ChangeNotifier{
   fetch(){
     for(int i = 0;i < 12;i++){
       for(int j = 0;j < 12;j++){
-        NumberModel tmpChan = NumberModel(A: i, B: j, answer: i*j, checkAnswer: false, isPick: false,pheptinh: true);
-        NumberModel tmpLe = NumberModel(A: i*j, B: j, answer: i, checkAnswer: false, isPick: false,pheptinh: false);
-        _lNumber.add(tmpChan);
-        _lNumber.add(tmpLe);
+        NumberModel tmpNhan = NumberModel(A: i, B: j, answer: i*j, checkAnswer: false, isPick: false,pheptinh: true);
+        NumberModel tmpChia = NumberModel(A: i*j, B: j, answer: i, checkAnswer: false, isPick: false,pheptinh: false);
+        _lNumber.add(tmpNhan);
+        _lNumber.add(tmpChia);
       }
     }
     boxNumber.put("data", _lNumber);

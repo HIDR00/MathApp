@@ -45,6 +45,8 @@ class _SettingState extends State<Setting> {
       return false;
     }else if((B - A+1) *(B - A+1) < 10){
       return false;
+    }else if(!(A != 0 ? int.parse(kkq1.text.trim()) <= A*A && int.parse(kkq2.text.trim()) >= B*B  : int.parse(kkq1.text.trim()) <= A*A && int.parse(kkq2.text.trim()) >= 1*B)){
+      return false;
     }
     return true;
   }
