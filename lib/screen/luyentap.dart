@@ -53,6 +53,7 @@ class _LuyenTapState extends State<LuyenTap> {
   }
 
   born() {
+    print(questionLength + 1);
     kkq1 = context.read<PhepTinh>().kkq1;
     kkq2 = context.read<PhepTinh>().kkq2;
     ks1 = context.read<PhepTinh>().ks1;
@@ -61,13 +62,17 @@ class _LuyenTapState extends State<LuyenTap> {
     B = randomInRange(ks1, ks2);
     indexImage = B.toString();
     answer = A * B;
-    while (answer < kkq1 ||
-        answer > kkq2 ||  (context.read<PhepTinh>().phepTinh == false && (A * B == 0)) ||
+    while(answer < kkq1 ||
+        answer > kkq2 ||  (context.read<PhepTinh>().phepTinh == false && (B == 0 && A != 0)) ||
         A < ks1 ||
         A > ks2 ||
         B < ks1 ||
         B > ks2) {
-      born();
+          print("check1");
+      A = randomInRange(ks1, ks2);
+      B = randomInRange(ks1, ks2);
+      indexImage = B.toString();
+      answer = A * B;
     }
     answerNumber = context.read<PhepTinh>().phepTinh
         ? NumberModel(
@@ -89,13 +94,46 @@ class _LuyenTapState extends State<LuyenTap> {
     }else{
       context.read<PhepTinh>().updatehtk(true);
     }
-    String question = A.toString() + (context.read<PhepTinh>().phepTinh ? 'x' : ':') + B.toString();
-      print("question: ${question}");
-      if(lQuestion.contains(question)){
-        print('check');
-        born();
+    String question = context.read<PhepTinh>().phepTinh ? A.toString() +  'x' + B.toString() : answer.toString() +  ':' + B.toString();
+    while(lQuestion.contains(question)){
+      A = randomInRange(ks1, ks2);
+      B = randomInRange(ks1, ks2);
+      indexImage = B.toString();
+      answer = A * B;
+      while(answer < kkq1 ||
+          answer > kkq2 ||  (context.read<PhepTinh>().phepTinh == false && (B == 0 && A != 0)) ||
+          A < ks1 ||
+          A > ks2 ||
+          B < ks1 ||
+          B > ks2) {
+        A = randomInRange(ks1, ks2);
+        B = randomInRange(ks1, ks2);
+        indexImage = B.toString();
+        answer = A * B;
       }
-      lQuestion.add(question);
+      answerNumber = context.read<PhepTinh>().phepTinh
+          ? NumberModel(
+              A: A,
+              B: B,
+              answer: answer,
+              checkAnswer: false,
+              isPick: false,
+              pheptinh: context.read<PhepTinh>().phepTinh)
+          : NumberModel(
+              A: answer,
+              B: B,
+              answer: A,
+              checkAnswer: false,
+              isPick: false,
+              pheptinh: context.read<PhepTinh>().phepTinh);
+      if(A > 12 || B > 10 || A <=0 || B <= 0){
+        context.read<PhepTinh>().updatehtk(false);
+      }else{
+        context.read<PhepTinh>().updatehtk(true);
+      }
+      question = context.read<PhepTinh>().phepTinh ? A.toString() +  'x' + B.toString() : answer.toString() +  ':' + B.toString();
+    }
+    lQuestion.add(question);
   }
 
   addAsnwer() {
@@ -379,102 +417,128 @@ class _LuyenTapState extends State<LuyenTap> {
                 height: 80,
               ),
               context.read<PhepTinh>().typeAnswerLT
-                  ? Container(
-                      height: 400,
-                      width: 380,
-                      child: GridView.builder(
-                        itemCount: lNumber.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisExtent: 150,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 20),
-                        itemBuilder: (context, index) {
-                          return Selector<PhepTinh, List<NumberModel>>(
-                            selector: (ctx, state) => state.lNumber,
-                            builder: (context, value, child) {
-                              return GestureDetector(
-                                onTap: () {
-                                  checkAnswer(index, value);
-                                  print(
-                                      "listCheck: ${lNumber[index].checkAnswer}");
-                                  print("isPick: ${lNumber[index].isPick}");
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: !lNumber[index].isPick
-                                        ? Colors.white
-                                        : lNumber[index].checkAnswer
-                                            ? True
-                                            : Wrong,
-                                    border: Border.all(
-                                      color: stroke,
-                                      width: 1,
+                  ? Expanded(
+                    child: Container(
+                        height: 400,
+                        width: 380,
+                        child: GridView.builder(
+                          itemCount: lNumber.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisExtent: 150,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 20),
+                          itemBuilder: (context, index) {
+                            return Selector<PhepTinh, List<NumberModel>>(
+                              selector: (ctx, state) => state.lNumber,
+                              builder: (context, value, child) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    checkAnswer(index, value);
+                                    print(
+                                        "listCheck: ${lNumber[index].checkAnswer}");
+                                    print("isPick: ${lNumber[index].isPick}");
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: !lNumber[index].isPick
+                                          ? Colors.white
+                                          : lNumber[index].checkAnswer
+                                              ? True
+                                              : Wrong,
+                                      border: Border.all(
+                                        color: stroke,
+                                        width: 1,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
                                     ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
+                                    child: Center(
+                                        child: Text(
+                                      "${lNumber[index].answer}",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: !lNumber[index].isPick
+                                              ? Colors.black
+                                              : Colors.white),
+                                    )),
                                   ),
-                                  child: Center(
-                                      child: Text(
-                                    "${lNumber[index].answer}",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: !lNumber[index].isPick
-                                            ? Colors.black
-                                            : Colors.white),
-                                  )),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ))
+                                );
+                              },
+                            );
+                          },
+                        )),
+                  )
                   : Selector<PhepTinh, List<NumberModel>>(
                       selector: (ctx, state) => state.lNumber,
                       builder: (context, value, child) {
-                        return Container(
-                            height: 400,
-                            width: 350,
-                            child: GridView.builder(
-                              itemCount: 12,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      mainAxisExtent: 60,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 35),
-                              itemBuilder: (context, index) {
-                                if (index == 9) {
-                                  return GestureDetector(
-                                      onTap: () {
-                                        onBackPress();
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Wrong,
-                                            width: 1,
+                        return Expanded(
+                          child: Container(
+                              height: 400,
+                              width: 350,
+                              child: GridView.builder(
+                                itemCount: 12,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        mainAxisExtent: 60,
+                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 35),
+                                itemBuilder: (context, index) {
+                                  if (index == 9) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          onBackPress();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: Wrong,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)),
                                           ),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                        ),
-                                        child: Center(
-                                            child: Icon(
-                                          Icons.backspace_outlined,
-                                          color: Wrong,
-                                          size: 30,
-                                        )),
-                                      ));
-                                }
-                                if (index == 11) {
-                                  return GestureDetector(
+                                          child: Center(
+                                              child: Icon(
+                                            Icons.backspace_outlined,
+                                            color: Wrong,
+                                            size: 30,
+                                          )),
+                                        ));
+                                  }
+                                  if (index == 11) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          checkAnswer2(value);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: True,
+                                            border: Border.all(
+                                              color: stroke,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)),
+                                          ),
+                                          child: Center(
+                                              child: Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 30,
+                                          )),
+                                        ));
+                                  }
+                                  if (index == 10) {
+                                    return GestureDetector(
                                       onTap: () {
-                                        checkAnswer2(value);
+                                        onKeyTap("0");
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: True,
+                                          color: Yellow2,
                                           border: Border.all(
                                             color: stroke,
                                             width: 1,
@@ -483,17 +547,17 @@ class _LuyenTapState extends State<LuyenTap> {
                                               Radius.circular(30)),
                                         ),
                                         child: Center(
-                                            child: Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                          size: 30,
+                                            child: Text(
+                                          "0",
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black),
                                         )),
-                                      ));
-                                }
-                                if (index == 10) {
+                                      ),
+                                    );
+                                  }
                                   return GestureDetector(
                                     onTap: () {
-                                      onKeyTap("0");
+                                      onKeyTap((index + 1).toString());
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -502,42 +566,20 @@ class _LuyenTapState extends State<LuyenTap> {
                                           color: stroke,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(30)),
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(30)),
                                       ),
                                       child: Center(
                                           child: Text(
-                                        "0",
+                                        "${index + 1}",
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.black),
                                       )),
                                     ),
                                   );
-                                }
-                                return GestureDetector(
-                                  onTap: () {
-                                    onKeyTap((index + 1).toString());
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Yellow2,
-                                      border: Border.all(
-                                        color: stroke,
-                                        width: 1,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      "${index + 1}",
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black),
-                                    )),
-                                  ),
-                                );
-                              },
-                            ));
+                                },
+                              )),
+                        );
                       }),
             ],
           ),

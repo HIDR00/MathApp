@@ -397,49 +397,73 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
                   ? Selector<PhepTinh, List<NumberModel>>(
                       selector: (ctx, state) => state.lNumber,
                       builder: (context, value, child) {
-                        return Container(
-                            height: 400,
-                            width: 350,
-                            child: GridView.builder(
-                              itemCount: 12,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      mainAxisExtent: 60,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 35),
-                              itemBuilder: (context, index) {
-                                if (index == 9) {
-                                  return GestureDetector(
-                                      onTap: () {
-                                        onBackPress();
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Wrong,
-                                            width: 1,
+                        return Expanded(
+                          child: Container(
+                              height: 400,
+                              width: 350,
+                              child: GridView.builder(
+                                itemCount: 12,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        mainAxisExtent: 60,
+                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 35),
+                                itemBuilder: (context, index) {
+                                  if (index == 9) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          onBackPress();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: Wrong,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)),
                                           ),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                        ),
-                                        child: Center(
-                                            child: Icon(
-                                          Icons.backspace_outlined,
-                                          color: Wrong,
-                                          size: 30,
-                                        )),
-                                      ));
-                                }
-                                if (index == 11) {
-                                  return GestureDetector(
+                                          child: Center(
+                                              child: Icon(
+                                            Icons.backspace_outlined,
+                                            color: Wrong,
+                                            size: 30,
+                                          )),
+                                        ));
+                                  }
+                                  if (index == 11) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          checkAnswer2(value);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: True,
+                                            border: Border.all(
+                                              color: stroke,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)),
+                                          ),
+                                          child: Center(
+                                              child: Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 30,
+                                          )),
+                                        ));
+                                  }
+                                  if (index == 10) {
+                                    return GestureDetector(
                                       onTap: () {
-                                        checkAnswer2(value);
+                                        onKeyTap("0");
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: True,
+                                          color: Yellow2,
                                           border: Border.all(
                                             color: stroke,
                                             width: 1,
@@ -448,17 +472,17 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
                                               Radius.circular(30)),
                                         ),
                                         child: Center(
-                                            child: Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                          size: 30,
+                                            child: Text(
+                                          "0",
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black),
                                         )),
-                                      ));
-                                }
-                                if (index == 10) {
+                                      ),
+                                    );
+                                  }
                                   return GestureDetector(
                                     onTap: () {
-                                      onKeyTap("0");
+                                      onKeyTap((index + 1).toString());
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -467,81 +491,61 @@ class _KiemTraPlayState extends State<KiemTraPlay> with TickerProviderStateMixin
                                           color: stroke,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(30)),
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(30)),
                                       ),
                                       child: Center(
                                           child: Text(
-                                        "0",
+                                        "${index + 1}",
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.black),
                                       )),
                                     ),
                                   );
-                                }
-                                return GestureDetector(
-                                  onTap: () {
-                                    onKeyTap((index + 1).toString());
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Yellow2,
-                                      border: Border.all(
-                                        color: stroke,
-                                        width: 1,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      "${index + 1}",
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black),
-                                    )),
-                                  ),
-                                );
-                              },
-                            ));
-                      })
-                  : Container(
-                      height: 350,
-                      width: 380,
-                      child: GridView.builder(
-                        itemCount: lNumber.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisExtent: 150,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 20),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              checkAnswer(index);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: stroke,
-                                  width: 1,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                "${lNumber[index].answer}",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: !lNumber[index].isPick
-                                        ? Colors.black
-                                        : Colors.white),
+                                },
                               )),
-                            ),
-                          );
-                        },
-                      ))
+                        );
+                      })
+                  : Expanded(
+                    child: Container(
+                        height: 350,
+                        width: 380,
+                        child: GridView.builder(
+                          itemCount: lNumber.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisExtent: 150,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 20),
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                checkAnswer(index);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: stroke,
+                                    width: 1,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                                child: Center(
+                                    child: Text(
+                                  "${lNumber[index].answer}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: !lNumber[index].isPick
+                                          ? Colors.black
+                                          : Colors.white),
+                                )),
+                              ),
+                            );
+                          },
+                        )),
+                  )
             ],
           ),
         ),

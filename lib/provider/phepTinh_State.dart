@@ -83,7 +83,7 @@ class PhepTinh extends ChangeNotifier{
     }else{
       tientrinh = (_tienTrinh2*100).toInt();
     }
-    if(tientrinh > _ctl2){
+    if(tientrinh >= _ctl2){
       _typeAnswerLT = false;
     }else{
        _typeAnswerLT = true;

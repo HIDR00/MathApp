@@ -29,25 +29,42 @@ class _SettingState extends State<Setting> {
   FocusNode ctl2FocusNode = FocusNode();
   FocusNode tgt1FocusNode = FocusNode();
   @override
-  int gcdEuclidean(int a, int b) {
-    while (b != 0) {
-      final t = b;
-      b = a % b;
-      a = t;
+  int countMultiplications(int ks1, int ks2, int kkq1, int kkq2) {
+    int count = 0;
+
+    for (int i = ks1; i <= ks2; i++) {
+      if (i == 0) continue;
+      int lowerBound = (kkq1 ~/ i).clamp(ks1, ks2);
+      int upperBound = (kkq2 ~/ i).clamp(ks1, ks2);
+      if (lowerBound <= upperBound) {
+        count += (upperBound - lowerBound + 1);
+      }
     }
-    return a;
+  return count;
   }
   
+
   check() {
     int A = int.parse(ks1.text.trim());
     int B = int.parse(ks2.text.trim());
-    if (int.parse(kkq1.text.trim()) >= int.parse(kkq2.text.trim()) || A >= B) {
-      return false;
-    }else if((B - A+1) *(B - A+1) < 10){
-      return false;
-    }else if(!(A != 0 ? int.parse(kkq1.text.trim()) <= A*A && int.parse(kkq2.text.trim()) >= B*B  : int.parse(kkq1.text.trim()) <= A*A && int.parse(kkq2.text.trim()) >= 1*B)){
+    if(countMultiplications(A,B,int.parse(kkq1.text.trim()),int.parse(kkq2.text.trim())) < 10){
       return false;
     }
+    print(countMultiplications(A,B,int.parse(kkq1.text.trim()),int.parse(kkq2.text.trim())));
+    // if (int.parse(kkq1.text.trim()) >= int.parse(kkq2.text.trim()) || A >= B) {
+    //   return false;
+    // }else if((B - A+1) *(B - A+1) < 10){
+    //   return false;
+    // }else if(B-A <3){
+    //   return false;
+    // }else if(B-A == 3){
+    //   if((B-1) * (B-1) < int.parse(kkq2.text.trim())){
+    //     return false;
+    //   }
+    //   else{
+    //     return true;
+    //   }
+    // }
     return true;
   }
 
